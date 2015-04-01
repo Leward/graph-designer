@@ -1,0 +1,20 @@
+.left-menu-item {
+    -fx-background-color: inherit;
+    -fx-font-size: 14px;
+}
+
+.left-menu-item:hover {
+    -fx-background-color: lightgrey;
+}
+
+.left-menu-item-selected {
+    -fx-background-color: darkblue;
+}
+
+.left-menu-item-selected:hover {
+    -fx-background-color: darkblue;
+}
+
+.left-menu-item-selected .label {
+    -fx-text-fill: white;
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane fx:id="root" fx:controller="fr.leward.graphdesigner.MainController" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <!--<left>-->
+        <!--<HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER">-->
+            <!--<children>-->
+                <!--<Button mnemonicParsing="false" text="Button" />-->
+            <!--</children>-->
+        <!--</HBox>-->
+    <!--</left>-->
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar>
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Close" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ToolBar prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                        <ToggleButton mnemonicParsing="false" text="Create Node" fx:id="createNodeButton" />
+                        <ToggleButton mnemonicParsing="false" text="Create Relationship" fx:id="createRelationshipButton" />
+                        <Separator orientation="VERTICAL" />
+                        <Button text="Manage Labels" fx:id="manageLabelsButton" />
+                    </items>
+                </ToolBar>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <Pane fx:id="pane" style="-fx-background-color: white;" BorderPane.alignment="TOP_LEFT">
+        </Pane>
+    </center>
+    <right>
+        <VBox fx:id="rightPane" prefWidth="200.0" style="-fx-background-color: lightsteelblue; -fx-padding: 5px;">
+            <children>
+                <!--<HBox alignment="CENTER_LEFT">-->
+                    <!--<children>-->
+                        <!--<Label text="Select a node or a relationship" />-->
+                        <!--<Label text="Label: " />-->
+                        <!--<ComboBox fx:id="selectedNodeLabelComboBox">-->
+                            <!--<items>-->
+                                <!--<FXCollections fx:factory="observableArrayList">-->
+                                    <!--<String fx:value="User" />-->
+                                    <!--<String fx:value="File" />-->
+                                    <!--<String fx:value="Folder" />-->
+                                    <!--<String fx:value="SharedFile" />-->
+                                    <!--<String fx:value="SharedFolder" />-->
+                                <!--</FXCollections>-->
+                            <!--</items>-->
+                        <!--</ComboBox>-->
+                    <!--</children>-->
+                <!--</HBox>-->
+            </children>
+        </VBox>
+    </right>
+    <bottom>
+        <HBox>
+            <children>
+                <Label fx:id="graphDataLabel" text="Graph data: 0 node | 0 relationship | 0 label" />
+            </children>
+        </HBox>
+    </bottom>
+
+</BorderPane>
