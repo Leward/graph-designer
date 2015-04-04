@@ -64,18 +64,50 @@ public class DefaultState implements State {
         public void consume(NodeDraggedEvent event) {
             MouseEvent mouseEvent = event.getMouseEvent();
             Circle circle = event.getNode().getCircle();
+
+            // Calculate deltas
+            double dx = mouseEvent.getX() - circle.getCenterX();
+            double dy = mouseEvent.getY() - circle.getCenterY();
+
+            // Update dragged nodes
             circle.setCenterX(mouseEvent.getX());
             circle.setCenterY(mouseEvent.getY());
+
+            // Ctrl is pressed we also move the other selected nodes
+            if(mouseEvent.isControlDown()) {
+                for(Node node : selectedNodes) {
+                    if(node != event.getNode()) {
+                        Circle nodeCircle = node.getCircle();
+                        nodeCircle.setCenterX(nodeCircle.getCenterX() + dx);
+                        nodeCircle.setCenterY(nodeCircle.getCenterY() + dy);
+                    }
+                }
+            }
 
             // Update lines
             Node movedNode = event.getNode();
             for(Relationship relationship : movedNode.getOutRelationships()) {
                 relationship.updateLine();
             }
-
             for(Relationship relationship : movedNode.getInRelationships()) {
                 relationship.updateLine();
             }
+
+            // Ctrl is press, we also update the other selected nodes relationship's lines
+            if(mouseEvent.isControlDown()) {
+                for(Node node : selectedNodes) {
+                    if(node != event.getNode()) {
+                        for(Relationship relationship : node.getOutRelationships()) {
+                            relationship.updateLine();
+                        }
+                        for(Relationship relationship : node.getInRelationships()) {
+                            relationship.updateLine();
+                        }
+                    }
+                }
+            }
+
+            // We remember that we are dragging the node to avoid conflicts with some other event
             isDraging = true;
         }
     };
