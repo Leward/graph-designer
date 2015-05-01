@@ -1,20 +1,24 @@
 package fr.leward.graphdesigner.graph;
 
 import fr.leward.graphdesigner.math.Arrow;
+import fr.leward.graphdesigner.ui.SelectableItem;
 import javafx.scene.shape.Line;
+import org.apache.commons.lang.NotImplementedException;
 
 /**
  * Created by Paul-Julien on 01/02/2015.
  */
-public class Relationship {
+public class Relationship implements SelectableItem {
 
     private Node startNode;
     private Node endNode;
+    private RelationshipType relationshipType;
     private Arrow arrow;
 
-    public Relationship(Node startNode, Node endNode) {
+    public Relationship(Node startNode, Node endNode, RelationshipType relationshipType) {
         this.startNode = startNode;
         this.endNode = endNode;
+        this.relationshipType = relationshipType;
     }
 
     public void updateLine() {
@@ -31,11 +35,25 @@ public class Relationship {
         return endNode;
     }
 
+    public RelationshipType getRelationshipType() {
+        return relationshipType;
+    }
+
     public Arrow getArrow() {
         return arrow;
     }
 
     public void setArrow(Arrow arrow) {
         this.arrow = arrow;
+    }
+
+    @Override
+    public void select() {
+        throw new NotImplementedException("Select relationship is not implemented yet");
+    }
+
+    @Override
+    public void unselect() {
+        throw new NotImplementedException("Unselect relationship is not implemented yet");
     }
 }

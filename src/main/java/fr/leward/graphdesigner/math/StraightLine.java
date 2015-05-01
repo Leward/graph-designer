@@ -37,8 +37,23 @@ public class StraightLine {
         this.b = -1 * (a * xA - yA);
     }
 
+    public StraightLine(double a, double b) {
+        this.a = a;
+        this.b = b;
+    }
+
     public double calculateY(double x) {
         return a * x + b;
+    }
+
+    public StraightLine translatedLine(double l) {
+        double lineAngle = Math.atan(a);
+        double completeAngle = lineAngle + Math.PI / 2;
+        double xA2 = Math.cos(completeAngle) * l + xA;
+        double yA2 = Math.sin(completeAngle) * l + yA;
+        double xB2 = Math.cos(completeAngle) * l + xB;
+        double yB2 = Math.sin(completeAngle) * l + yB;
+        return new StraightLine(xA2, yA2, xB2, yB2);
     }
 
     @Override

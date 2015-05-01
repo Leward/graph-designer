@@ -8,6 +8,10 @@ import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.state.AddNodeState;
 import fr.leward.graphdesigner.state.DefaultState;
 import fr.leward.graphdesigner.state.StateManager;
+import fr.leward.graphdesigner.ui.AddLabelComboBox;
+import fr.leward.graphdesigner.ui.RightPaneUpdator;
+import fr.leward.graphdesigner.ui.Selection;
+import fr.leward.graphdesigner.utils.ColorUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -51,7 +56,27 @@ public class MainController implements Initializable {
     @FXML private Button manageLabelsButton;
     @FXML private Label graphDataLabel;
     @FXML private VBox rightPane;
-    private ComboBox<fr.leward.graphdesigner.graph.Label> rightPanelLabelsComboBox;
+
+    private Button rightPaneAddLabelButton;
+    private AddLabelComboBox rightPanelLabelsComboBox;
+
+    /**
+     * Current selection. Multiple elements can be selected at the same time.
+     * The selection is Observable
+     */
+    private Selection selection = new Selection();
+
+    /**
+     * Responsible of updating the pane on the right: building and interacting
+     * with the UI elements
+     */
+    private RightPaneUpdator rightPaneUpdator;
+
+    /**
+     * Used to keep track during click event if a node is being dragged
+     * or actually ciecked
+     */
+    private boolean draggedNodeDetected = false;
 
     private StateManager stateManager;
 
@@ -63,7 +88,7 @@ public class MainController implements Initializable {
         stateManager = new StateManager();
 
         // Init some elements in the UI
-        restoreRightPaneToEmpty();
+        rightPaneUpdator = new RightPaneUpdator(rightPane, selection);
 
         // Register some events from UI
         createNodeButton.setOnAction(onCreateNodeButtonAction);
@@ -74,7 +99,7 @@ public class MainController implements Initializable {
 
         // Register some events from Event Streams
         EventStreams.graphUpdatedEventStream.subscribe(graphUpdatedEventConsumer);
-        EventStreams.nodeSelectedEventStream.subscribe(nodeSelectedEventConsumer);
+//        EventStreams.nodeSelectedEventStream.subscribe(nodeSelectedEventConsumer);
         EventStreams.labelAddedEventStream.subscribe(labelAddedEventEventConsumer);
     }
 
@@ -132,7 +157,6 @@ public class MainController implements Initializable {
     private EventHandler<MouseEvent> onPaneClicked = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            log.debug("onPaneClicked");
             EventStreams.graphPaneClickedEventStream.publish(new GraphPaneClickedEvent(event));
         }
     };
@@ -164,78 +188,12 @@ public class MainController implements Initializable {
             if(graph.countLabels() > 1) {
                 sb.append("s");
             }
+            sb.append(" | " + graph.getRelationshipTypes().size() + " relationship type");
+            if(graph.getRelationshipTypes().size() > 1) {
+                sb.append("s");
+            }
             graphDataLabel.setText(sb.toString());
         }
-    };
-
-    private EventConsumer<NodeSelectedEvent> nodeSelectedEventConsumer = new EventConsumer<NodeSelectedEvent>() {
-        @Override
-        public void consume(NodeSelectedEvent event) {
-            updateRightPane();
-            // TODO: Reimplement here
-//            HBox firstLine = new HBox();
-//            firstLine.setAlignment(Pos.CENTER_LEFT);
-//
-//            Label label = new Label("Label: ");
-//            firstLine.getChildren().add(label);
-//
-//            ObservableList observableList = FXCollections.observableList(graph.getLabels());
-//            rightPanelLabelsComboBox = new ComboBox(observableList);
-//            final Node selectedNode = ((DefaultState) stateManager.getState()).getSelectedNode();
-//            rightPanelLabelsComboBox.setValue(selectedNode.getLabel());
-//
-//            rightPanelLabelsComboBox.valueProperty().addListener(new ChangeListener<fr.leward.graphdesigner.graph.Label>() {
-//                @Override
-//                public void changed(ObservableValue<? extends fr.leward.graphdesigner.graph.Label> observable, fr.leward.graphdesigner.graph.Label oldValue, fr.leward.graphdesigner.graph.Label newValue) {
-//                    selectedNode.setLabel(newValue);
-//                }
-//            });
-//            firstLine.getChildren().add(rightPanelLabelsComboBox);
-//
-//            rightPane.getChildren().clear();
-//            rightPane.getChildren().add(firstLine);
-        }
-    };
-
-    private EventConsumer<NodeUnselectedEvent> nodeUnselectedEventConsumer = new EventConsumer<NodeUnselectedEvent>() {
-        @Override
-        public void consume(NodeUnselectedEvent event) {
-            updateRightPane();
-        }
-    };
-
-    private void updateRightPane() {
-        final DefaultState defaultState = (stateManager.getState() instanceof DefaultState) ? (DefaultState) stateManager.getState() : null;
-        boolean noNodeSelected = defaultState == null || defaultState.getSelectedNodes().size() == 0;
-        if(noNodeSelected) {
-            restoreRightPaneToEmpty();
-            return;
-        }
-
-        HBox firstLine = new HBox();
-        firstLine.setAlignment(Pos.CENTER_LEFT);
-
-        Label label = new Label("Label: ");
-        firstLine.getChildren().add(label);
-
-        ObservableList observableList = FXCollections.observableList(graph.getLabels());
-        rightPanelLabelsComboBox = new ComboBox(observableList);
-//      final Node selectedNode = ((DefaultState) stateManager.getState()).getSelectedNode();
-//      rightPanelLabelsComboBox.setValue(selectedNode.getLabel());
-
-        rightPanelLabelsComboBox.valueProperty().addListener(new ChangeListener<fr.leward.graphdesigner.graph.Label>() {
-            @Override
-            public void changed(ObservableValue<? extends fr.leward.graphdesigner.graph.Label> observable, fr.leward.graphdesigner.graph.Label oldValue, fr.leward.graphdesigner.graph.Label newValue) {
-                for(Node selectedNode : defaultState.getSelectedNodes()) {
-                    selectedNode.setLabel(newValue);
-                }
-            }
-        });
-        firstLine.getChildren().add(rightPanelLabelsComboBox);
-
-        // Replace the right pane with the UI elements we just built
-        rightPane.getChildren().clear();
-        rightPane.getChildren().add(firstLine);
     };
 
     private EventConsumer<LabelAddedEvent> labelAddedEventEventConsumer = new EventConsumer<LabelAddedEvent>() {
@@ -247,11 +205,6 @@ public class MainController implements Initializable {
         }
     };
 
-    private void restoreRightPaneToEmpty() {
-        rightPane.getChildren().clear();
-        Label label = new Label("Select a node or a relationship");
-        rightPane.getChildren().add(label);
-    }
 
     //
     // Getters and Setters
@@ -281,5 +234,16 @@ public class MainController implements Initializable {
         return createRelationshipButton;
     }
 
+    public Selection getSelection() {
+        return selection;
+    }
+
+    public boolean isDraggedNodeDetected() {
+        return draggedNodeDetected;
+    }
+
+    public void setDraggedNodeDetected(boolean draggedNodeDetected) {
+        this.draggedNodeDetected = draggedNodeDetected;
+    }
 }
 

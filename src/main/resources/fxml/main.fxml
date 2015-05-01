@@ -43,6 +43,7 @@
                         <ToggleButton mnemonicParsing="false" text="Create Relationship" fx:id="createRelationshipButton" />
                         <Separator orientation="VERTICAL" />
                         <Button text="Manage Labels" fx:id="manageLabelsButton" />
+                        <Button text="Manage Relationships" fx:id="manageRelationshipsButton" />
                     </items>
                 </ToolBar>
             </children>
@@ -78,7 +79,7 @@
     <bottom>
         <HBox>
             <children>
-                <Label fx:id="graphDataLabel" text="Graph data: 0 node | 0 relationship | 0 label" />
+                <Label fx:id="graphDataLabel" text="Graph data: 0 node | 0 relationship | 0 label | 0 relationship type" />
             </children>
         </HBox>
     </bottom>

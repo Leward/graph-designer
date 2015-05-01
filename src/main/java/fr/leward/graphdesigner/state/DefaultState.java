@@ -30,7 +30,7 @@ public class DefaultState implements State {
         log.debug("Enter Default State");
         EventStreams.leaveCurrentStateEventStream.subscribe(leaveCurrentStateEventConsumer);
         EventStreams.nodeDraggedEventStream.subscribe(nodeDraggedEventConsumer);
-        EventStreams.nodeClickedEventStream.subscribe(nodeClickedEventConsumer);
+//        EventStreams.nodeClickedEventStream.subscribe(nodeClickedEventConsumer);
         EventStreams.mouseEnterNodeEventStream.subscribe(mouseEnterNodeEventConsumer);
         EventStreams.mouseLeaveNodeEventEventStream.subscribe(mouseLeaveNodeEventConsumer);
     }
@@ -47,7 +47,7 @@ public class DefaultState implements State {
 
         EventStreams.leaveCurrentStateEventStream.unsubscribe(leaveCurrentStateEventConsumer);
         EventStreams.nodeDraggedEventStream.unsubscribe(nodeDraggedEventConsumer);
-        EventStreams.nodeClickedEventStream.unsubscribe(nodeClickedEventConsumer);
+//        EventStreams.nodeClickedEventStream.unsubscribe(nodeClickedEventConsumer);
         EventStreams.mouseEnterNodeEventStream.unsubscribe(mouseEnterNodeEventConsumer);
         EventStreams.mouseLeaveNodeEventEventStream.unsubscribe(mouseLeaveNodeEventConsumer);
     }
@@ -75,7 +75,7 @@ public class DefaultState implements State {
 
             // Ctrl is pressed we also move the other selected nodes
             if(mouseEvent.isControlDown()) {
-                for(Node node : selectedNodes) {
+                for(Node node : MainController.getInstance().getSelection().getNodes()) {
                     if(node != event.getNode()) {
                         Circle nodeCircle = node.getCircle();
                         nodeCircle.setCenterX(nodeCircle.getCenterX() + dx);
@@ -109,64 +109,7 @@ public class DefaultState implements State {
 
             // We remember that we are dragging the node to avoid conflicts with some other event
             isDraging = true;
-        }
-    };
-
-    private EventConsumer<NodeClickedEvent> nodeClickedEventConsumer = new EventConsumer<NodeClickedEvent>() {
-        @Override
-        public void consume(NodeClickedEvent event) {
-            MouseEvent mouseEvent = event.getMouseEvent();
-            Node targetNode = event.getNode();
-            if(isDraging) {
-                isDraging = false;
-                return;
-            }
-
-            // CTRL has been pressed
-            if(mouseEvent.isControlDown()) {
-                if(selectedNodes.contains(targetNode)) {
-                    selectedNodes.remove(targetNode);
-                    targetNode.unselectNode();
-                    EventStreams.nodeSelectedEventStream.publish(new NodeSelectedEvent(targetNode));
-                }
-                else {
-                    selectedNodes.add(targetNode);
-                    targetNode.selectNode();
-                    EventStreams.nodeUnselectedEventStream.publish(new NodeUnselectedEvent(targetNode));
-                }
-            }
-            // Regular selection, CTRL button has not been pressed
-            else {
-                // Click on a node when there is no node selected
-                if(selectedNodes.size() == 0) {
-                    selectedNodes.add(targetNode);
-                    targetNode.selectNode();
-                    EventStreams.nodeSelectedEventStream.publish(new NodeSelectedEvent(targetNode));
-                }
-                // Click on a node that is currently selected
-                else if(selectedNodes.contains(targetNode)) {
-                    for(Node node : selectedNodes) {
-                        if(node != targetNode) {
-                            node.unselectNode();
-                            EventStreams.nodeSelectedEventStream.publish(new NodeSelectedEvent(node));
-                        }
-                    }
-                    // Keep only the targetNode
-                    selectedNodes.clear();
-                    selectedNodes.add(targetNode);
-                }
-                // Click on a node is not currently selected
-                else {
-                    for(Node node : selectedNodes) {
-                        node.unselectNode();
-                        EventStreams.nodeSelectedEventStream.publish(new NodeSelectedEvent(node));
-                    }
-                    selectedNodes.clear();
-                    selectedNodes.add(targetNode);
-                    targetNode.selectNode();
-                    EventStreams.nodeSelectedEventStream.publish(new NodeSelectedEvent(targetNode));
-                }
-            }
+            MainController.getInstance().setDraggedNodeDetected(true);
         }
     };
 
@@ -186,5 +129,13 @@ public class DefaultState implements State {
 
     public List<Node> getSelectedNodes() {
         return selectedNodes;
+    }
+
+    /**
+     * Get the first selected node
+     * @return the first selected node from the selected nodes list, null if none
+     */
+    public Node getSelectedNode() {
+        return (selectedNodes.isEmpty()) ? null : selectedNodes.get(0);
     }
 }

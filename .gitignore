@@ -16,3 +16,6 @@ target/
 ### Eclipse ###
 .project
 .classpath
+
+### Windows ###
+Thumbs.db

@@ -4,6 +4,7 @@ import fr.leward.graphdesigner.MainController;
 import fr.leward.graphdesigner.event.*;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
 import fr.leward.graphdesigner.event.bus.EventStreams;
+import fr.leward.graphdesigner.event.handler.NodeClickedEventHandler;
 import fr.leward.graphdesigner.graph.Node;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.applet.Main;
 
 /**
  * Created by Paul-Julien on 08/02/2015.
@@ -64,13 +66,14 @@ public class AddNodeState implements State {
             final Node node = new Node();
             node.setCircle(circle);
 
-            circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    log.debug("node clicked");
-                    EventStreams.nodeClickedEventStream.publish(new NodeClickedEvent(node, event));
-                }
-            });
+//            circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//                @Override
+//                public void handle(MouseEvent event) {
+//                    log.debug("node clicked");
+//                    EventStreams.nodeClickedEventStream.publish(new NodeClickedEvent(node, event));
+//                }
+//            });
+            circle.setOnMouseClicked(new NodeClickedEventHandler(node));
             circle.setOnMouseDragged(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -90,6 +93,7 @@ public class AddNodeState implements State {
                 }
             });
             MainController.getInstance().getPane().getChildren().add(circle);
+            node.setId(MainController.getInstance().getGraph().generateId());
             MainController.getInstance().getGraph().addNode(node);
             // Leave the state
             leaveState();

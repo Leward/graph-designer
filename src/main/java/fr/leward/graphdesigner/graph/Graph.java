@@ -3,6 +3,8 @@ package fr.leward.graphdesigner.graph;
 import fr.leward.graphdesigner.event.GraphUpdatedEvent;
 import fr.leward.graphdesigner.event.LabelAddedEvent;
 import fr.leward.graphdesigner.event.bus.EventStreams;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
 import java.util.*;
@@ -12,11 +14,19 @@ import java.util.*;
  */
 public class Graph {
 
+    private Long lastIdUsed = new Long(0);
     private Collection<Node> nodes = new ArrayList<Node>();
     private Collection<Relationship> relationships = new ArrayList<Relationship>();
     private Map<String, Label> labels = new HashMap<String, Label>();
+    private ObservableList<RelationshipType> relationshipTypes = FXCollections.observableArrayList();
 
     public Graph() {
+        Label userLabel = new Label("User");
+        userLabel.setColor(Color.DARKGREEN);
+        addLabel(userLabel);
+
+        relationshipTypes.add(new RelationshipType("FILESPACE"));
+        relationshipTypes.add(new RelationshipType("CONTAINS"));
     }
 
     private void notifyGraphUpdated() {
@@ -95,5 +105,54 @@ public class Graph {
                 node.refreshNodeColor();
             }
         }
+    }
+
+    /**
+     * Generate a new ID for the graph objects
+     * @return the generated ID
+     */
+    public Long generateId() {
+        return ++lastIdUsed;
+    }
+
+    /**
+     * Returns true if the graph already contains a given relationship type
+     * defined as a String
+     * @param type The name of the relationship type
+     * @return whether the relationship type already exists or not
+     */
+    public boolean containsRelationshipType(String type) {
+        for(RelationshipType relationshipType : relationshipTypes) {
+            if(relationshipType.getName().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public RelationshipType getRelationshipTypeByName(String name) {
+        for(RelationshipType relationshipType : relationshipTypes) {
+            if(relationshipType.getName().equals(name)) {
+                return relationshipType;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Add a relationship type. If the object is already in the list it is ignored.
+     * @param relationshipType
+     */
+    public void addRelationshipType(RelationshipType relationshipType) {
+        if(!relationshipTypes.contains(relationshipType) && containsRelationshipType(relationshipType.getName())) {
+            throw new IllegalArgumentException("Duplicate of relationship type used. ");
+        }
+        if(!relationshipTypes.contains(relationshipType)) {
+            relationshipTypes.add(relationshipType);
+        }
+    }
+
+    public ObservableList<RelationshipType> getRelationshipTypes() {
+        return relationshipTypes;
     }
 }

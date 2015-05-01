@@ -18,3 +18,16 @@
 .left-menu-item-selected .label {
     -fx-text-fill: white;
 }
+
+.relationship-type-selection .relationship {
+    -fx-padding: 3px;
+    -fx-text-fill: black;
+}
+
+.relationship-type-selection .relationship:hover {
+     -fx-background-color: darkblue;
+ }
+
+.relationship-type-selection .relationship:hover .label {
+    -fx-text-fill: white;
+}

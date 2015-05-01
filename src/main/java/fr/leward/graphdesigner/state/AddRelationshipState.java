@@ -7,10 +7,13 @@ import fr.leward.graphdesigner.event.NodeClickedEvent;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
 import fr.leward.graphdesigner.event.bus.EventStream;
 import fr.leward.graphdesigner.event.bus.EventStreams;
+import fr.leward.graphdesigner.event.handler.RelationshipTypeSelectedHandler;
 import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.graph.Relationship;
+import fr.leward.graphdesigner.graph.RelationshipType;
 import fr.leward.graphdesigner.math.Arrow;
 import fr.leward.graphdesigner.math.StraightLine;
+import fr.leward.graphdesigner.ui.AddRelationshipTypeSelection;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -28,11 +31,17 @@ public class AddRelationshipState implements State {
     private Relationship relationship;
     private Node startNode;
     private Node endNode;
+    private RelationshipType relationshipType;
     private Line line;
+    private AddRelationshipTypeSelection addRelationshipTypeSelection;
 
     @Override
     public void enterState() {
         log.debug("Enter AddRelationshipState");
+
+        // Lock the selection
+        MainController.getInstance().getSelection().lock();
+
         // Listen for exit state event
         EventStreams.leaveCurrentStateEventStream.subscribe(leaveCurrentStateEventConsumer);
 
@@ -49,6 +58,9 @@ public class AddRelationshipState implements State {
         if(endNode == null && line != null) {
             MainController.getInstance().getPane().getChildren().removeAll(line);
         }
+
+        // Unlock the selection
+        MainController.getInstance().getSelection().unlock();
 
         // Unsubscribe registered events
         EventStreams.leaveCurrentStateEventStream.unsubscribe(leaveCurrentStateEventConsumer);
@@ -79,35 +91,57 @@ public class AddRelationshipState implements State {
                 mainController.getPane().getChildren().add(line);
                 line.toBack();
             }
-            else {
+            else if(endNode == null) {
                 endNode = event.getNode();
                 line.setEndX(endNode.getCircle().getCenterX());
                 line.setEndY(endNode.getCircle().getCenterY());
 
-                // Add the relationship to the graph
-                relationship = new Relationship(startNode, endNode);
-                startNode.getOutRelationships().add(relationship);
-                endNode.getInRelationships().add(relationship);
-                MainController.getInstance().getGraph().addRelationship(relationship);
-
-                MainController.getInstance().getPane().getChildren().remove(line);
-
-                // Create and set shape of the arrow
-                Pane graphPane = MainController.getInstance().getPane();
-                Arrow arrow = new Arrow(relationship);
-                graphPane.getChildren().add(arrow.getLine());
-                graphPane.getChildren().add(arrow.getHeadPath());
-                relationship.setArrow(arrow);
-
-                leaveState();
+                selectRelationshipType(event);
             }
         }
     };
 
+    public RelationshipTypeSelectedHandler relationshipTypeSelectedHandler = (selectedRelationshipType) -> {
+        relationshipType = selectedRelationshipType;
+
+        // Add the relationship to the graph
+        relationship = new Relationship(startNode, endNode, relationshipType);
+        startNode.getOutRelationships().add(relationship);
+        endNode.getInRelationships().add(relationship);
+        MainController.getInstance().getGraph().addRelationship(relationship);
+
+        // Clean pane drawings
+        Pane pane = MainController.getInstance().getPane();
+        pane.getChildren().remove(line);
+        pane.getChildren().remove(addRelationshipTypeSelection);
+
+        // Create and set shape of the arrow
+        Pane graphPane = MainController.getInstance().getPane();
+        Arrow arrow = new Arrow(relationship);
+        graphPane.getChildren().add(arrow.getLine());
+        graphPane.getChildren().add(arrow.getHeadPath());
+        graphPane.getChildren().add(arrow.getTypeLabel());
+        //graphPane.getChildren().add(arrow.getTestCircle());
+//        graphPane.getChildren().add(arrow.getTestLine());
+        relationship.setArrow(arrow);
+
+        // Relationship properly created, leave state
+        leaveState();
+    };
+
+    public void selectRelationshipType(NodeClickedEvent nodeClickedEvent) {
+        MouseEvent mouseEvent = nodeClickedEvent.getMouseEvent();
+        addRelationshipTypeSelection = new AddRelationshipTypeSelection(MainController.getInstance().getGraph(), relationship);
+        addRelationshipTypeSelection.setOnRelationshipSelectedHandler(relationshipTypeSelectedHandler);
+        addRelationshipTypeSelection.setLayoutX(mouseEvent.getX());
+        addRelationshipTypeSelection.setLayoutY(mouseEvent.getY());
+        MainController.getInstance().getPane().getChildren().add(addRelationshipTypeSelection);
+    }
+
     private EventConsumer<GraphPaneMouseMovedEvent> graphPaneMouseMovedEventConsumer = new EventConsumer<GraphPaneMouseMovedEvent>() {
         @Override
         public void consume(GraphPaneMouseMovedEvent event) {
-            if(startNode != null) {
+            if(startNode != null && endNode == null) {
                 MouseEvent mouseEvent = event.getMouseEvent();
                 line.setEndX(mouseEvent.getX());
                 line.setEndY(mouseEvent.getY());
