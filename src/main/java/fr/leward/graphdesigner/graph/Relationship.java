@@ -2,12 +2,8 @@ package fr.leward.graphdesigner.graph;
 
 import fr.leward.graphdesigner.math.Arrow;
 import fr.leward.graphdesigner.ui.SelectableItem;
-import javafx.scene.shape.Line;
 import org.apache.commons.lang.NotImplementedException;
 
-/**
- * Created by Paul-Julien on 01/02/2015.
- */
 public class Relationship implements SelectableItem {
 
     private Node startNode;
@@ -54,6 +50,7 @@ public class Relationship implements SelectableItem {
 
     @Override
     public void unselect() {
-        throw new NotImplementedException("Unselect relationship is not implemented yet");
+        // TODO: Implement relationship selection
+        //throw new NotImplementedException("Unselect relationship is not implemented yet");
     }
 }

@@ -2,25 +2,18 @@ package fr.leward.graphdesigner.ui;
 
 import fr.leward.graphdesigner.graph.Label;
 import fr.leward.graphdesigner.graph.Node;
+import fr.leward.graphdesigner.graph.Relationship;
 import fr.leward.graphdesigner.utils.ListUtils;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.transformation.FilteredList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Selection implements Observable {
@@ -106,6 +99,18 @@ public class Selection implements Observable {
                 .filtered(item -> { return item instanceof Node; })
                 .stream()
                 .map(item -> { return (Node) item; })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get relationships in the selection
+     * @return
+     */
+    public List<Relationship> getRelationships() {
+        return selectedItems
+                .filtered(item -> { return item instanceof Relationship; })
+                .stream()
+                .map(item -> { return (Relationship) item; })
                 .collect(Collectors.toList());
     }
 

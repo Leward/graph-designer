@@ -1,24 +1,24 @@
 package fr.leward.graphdesigner.math;
 
-import fr.leward.graphdesigner.MainController;
 import fr.leward.graphdesigner.graph.Relationship;
-import javafx.animation.RotateTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Arrow {
 
@@ -30,8 +30,6 @@ public class Arrow {
     private Label typeLabel;
     private double typeLabelWidth;
     private double typeLabelHeight;
-    private Circle testCircle;
-    private Line testLine;
 
     private Path headPath;
     private MoveTo moveTo1;
@@ -73,14 +71,6 @@ public class Arrow {
             });
         }
 
-        if(testCircle == null) {
-            testCircle = new Circle(5);
-            testCircle.setStyle("-fx-fill: red; -fx-opacity: 0.7;");
-            testLine = new Line();
-            testLine.setFill(Color.GREEN);
-            testLine.setStroke(Color.GREEN);
-        }
-
         // Define the line that goes through the center of both nodes. The StraightLine object will calculate the equation of the line
         StraightLine straightLine = new StraightLine(startNodeShape.getCenterX(), startNodeShape.getCenterY(), endNodeShape.getCenterX(), endNodeShape.getCenterY());
 
@@ -100,8 +90,6 @@ public class Arrow {
         double distance = Math.sqrt(Math.pow(endNodeShape.getCenterX() - startNodeShape.getCenterX(), 2) + Math.pow(endNodeShape.getCenterY() - startNodeShape.getCenterY(), 2));
         double labelCenterX = direction * (distance / 2 * Math.cos(lineAngle)) + startNodeShape.getCenterX();
         double labelCenterY = direction * (distance / 2 * Math.sin(lineAngle)) + startNodeShape.getCenterY();
-        testCircle.setCenterX(labelCenterX);
-        testCircle.setCenterY(labelCenterY);
 
         typeLabel.setLayoutX(labelCenterX - (typeLabelWidth / 2));
         typeLabel.setLayoutY(labelCenterY - (typeLabelHeight / 2));
@@ -245,6 +233,18 @@ public class Arrow {
         return new Dimension2D(control.getWidth(), control.getHeight());
     }
 
+    /**
+     * Get all the graphic elements used to render the relationship
+     * @return
+     */
+    public Collection<Node> getDrawableNodes() {
+        Collection<javafx.scene.Node> drawableNodes = new ArrayList<>();
+        drawableNodes.add(line);
+        drawableNodes.add(headPath);
+        drawableNodes.add(typeLabel);
+        return drawableNodes;
+    }
+
     public Relationship getRelationship() {
         return relationship;
     }
@@ -261,11 +261,4 @@ public class Arrow {
         return typeLabel;
     }
 
-    public Circle getTestCircle() {
-        return testCircle;
-    }
-
-    public Line getTestLine() {
-        return testLine;
-    }
 }

@@ -57,6 +57,13 @@ public class Node implements SelectableItem {
         return inRelationships;
     }
 
+    public Collection<Relationship> getInAndOutRelationships() {
+        Collection<Relationship> relationships = new ArrayList<>();
+        relationships.addAll(getInRelationships());
+        relationships.addAll(getOutRelationships());
+        return relationships;
+    }
+
     public Long getId() {
         return id;
     }

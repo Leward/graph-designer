@@ -5,32 +5,26 @@ import fr.leward.graphdesigner.event.bus.EventConsumer;
 import fr.leward.graphdesigner.event.bus.EventStreams;
 import fr.leward.graphdesigner.graph.Graph;
 import fr.leward.graphdesigner.graph.Node;
+import fr.leward.graphdesigner.graph.Relationship;
 import fr.leward.graphdesigner.state.AddNodeState;
-import fr.leward.graphdesigner.state.DefaultState;
 import fr.leward.graphdesigner.state.StateManager;
 import fr.leward.graphdesigner.ui.AddLabelComboBox;
 import fr.leward.graphdesigner.ui.RightPaneUpdator;
 import fr.leward.graphdesigner.ui.Selection;
-import fr.leward.graphdesigner.utils.ColorUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -103,6 +97,9 @@ public class MainController implements Initializable {
         EventStreams.graphUpdatedEventStream.subscribe(graphUpdatedEventConsumer);
 //        EventStreams.nodeSelectedEventStream.subscribe(nodeSelectedEventConsumer);
         EventStreams.labelAddedEventStream.subscribe(labelAddedEventEventConsumer);
+
+        // Listen for keyboard keys
+        root.setOnKeyPressed(globalOnKeyPressed);
     }
 
     private EventHandler<ActionEvent> onCreateNodeButtonAction = new EventHandler<ActionEvent>() {
@@ -224,6 +221,45 @@ public class MainController implements Initializable {
             }
         }
     };
+
+    /**
+     *
+     */
+    private EventHandler<KeyEvent> globalOnKeyPressed = (event) -> {
+        if(event.getCode() == KeyCode.DELETE) {
+            deleteSelection();
+        }
+    };
+
+    /**
+     * Delete the selected items
+     */
+    private void deleteSelection() {
+        // When the selection is locked it should not be possible to remove selected items
+        if(selection.isSelectionLocked()) {
+            return;
+        }
+
+        // Delete selected nodes and associated relationships
+        for(Node node : selection.getNodes()) {
+            // Remove relationships attached to the node
+            for(Relationship relationship : node.getInAndOutRelationships()) {
+                pane.getChildren().removeAll(relationship.getArrow().getDrawableNodes());
+                graph.getRelationships().remove(relationship);
+                selection.remove(relationship);
+            }
+            pane.getChildren().remove(node.getCircle());
+            graph.getNodes().remove(node);
+            selection.remove(node);
+        }
+
+        // Delete selected relationships
+        for(Relationship relationship : selection.getRelationships()) {
+            pane.getChildren().removeAll(relationship.getArrow().getDrawableNodes());
+            graph.getRelationships().remove(relationship);
+            selection.remove(relationship);
+        }
+    }
 
 
     //
