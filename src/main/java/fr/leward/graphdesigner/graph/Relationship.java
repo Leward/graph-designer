@@ -45,12 +45,15 @@ public class Relationship implements SelectableItem {
 
     @Override
     public void select() {
-        throw new NotImplementedException("Select relationship is not implemented yet");
+        for(javafx.scene.Node drawableNode : arrow.getDrawableNodes()) {
+            drawableNode.getStyleClass().add("relationship-selected");
+        }
     }
 
     @Override
     public void unselect() {
-        // TODO: Implement relationship selection
-        //throw new NotImplementedException("Unselect relationship is not implemented yet");
+        for(javafx.scene.Node drawableNode : arrow.getDrawableNodes()) {
+            drawableNode.getStyleClass().remove("relationship-selected");
+        }
     }
 }

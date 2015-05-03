@@ -1,5 +1,6 @@
 package fr.leward.graphdesigner.ui;
 
+import fr.leward.graphdesigner.graph.Node;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -34,22 +35,21 @@ public class RightPaneUpdator {
 
     private void multipleNodesSelected() {
         rightPane.getChildren().clear();
-        Label label = new Label("Multiple node selected");
+        Label label = new Label("Multiple nodes / relationships selected");
         rightPane.getChildren().add(label);
     }
 
-// TODO: Handle relationship selection
-//    private void singleRelationshipSelected() {
-//        rightPane.getChildren().clear();
-//        Label label = new Label("One relationship selected");
-//        rightPane.getChildren().add(label);
-//    }
-//
-//    private void multipleRelationshipsSelected() {
-//        rightPane.getChildren().clear();
-//        Label label = new Label("Multiple relationship selected");
-//        rightPane.getChildren().add(label);
-//    }
+    private void singleRelationshipSelected() {
+        rightPane.getChildren().clear();
+        Label label = new Label("One relationship selected");
+        rightPane.getChildren().add(label);
+    }
+
+    private void multipleRelationshipsSelected() {
+        rightPane.getChildren().clear();
+        Label label = new Label("Multiple relationship selected");
+        rightPane.getChildren().add(label);
+    }
 
 
 
@@ -64,7 +64,12 @@ public class RightPaneUpdator {
         }
         else if(selection.size() == 1) {
             log.debug("Selection changed: switch right pane to single node selected");
-            singleNodeSelected();
+            if(selection.getSelectedItems().get(0) instanceof Node) {
+                singleNodeSelected();
+            }
+            else {
+                singleRelationshipSelected();
+            }
         }
         else {
             log.debug("Selection changed: switch right pane to multiple nodes selected");

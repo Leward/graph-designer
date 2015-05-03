@@ -5,25 +5,20 @@ import fr.leward.graphdesigner.event.GraphPaneMouseMovedEvent;
 import fr.leward.graphdesigner.event.LeaveCurrentStateEvent;
 import fr.leward.graphdesigner.event.NodeClickedEvent;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
-import fr.leward.graphdesigner.event.bus.EventStream;
 import fr.leward.graphdesigner.event.bus.EventStreams;
+import fr.leward.graphdesigner.event.handler.RelationshipClickedEventHandler;
 import fr.leward.graphdesigner.event.handler.RelationshipTypeSelectedHandler;
 import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.graph.Relationship;
 import fr.leward.graphdesigner.graph.RelationshipType;
 import fr.leward.graphdesigner.math.Arrow;
-import fr.leward.graphdesigner.math.StraightLine;
 import fr.leward.graphdesigner.ui.AddRelationshipTypeSelection;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by Paul-Julien on 01/02/2015.
- */
 public class AddRelationshipState implements State {
 
     private static final Logger log = LoggerFactory.getLogger(AddRelationshipState.class);
@@ -121,9 +116,9 @@ public class AddRelationshipState implements State {
         graphPane.getChildren().add(arrow.getLine());
         graphPane.getChildren().add(arrow.getHeadPath());
         graphPane.getChildren().add(arrow.getTypeLabel());
-        //graphPane.getChildren().add(arrow.getTestCircle());
-//        graphPane.getChildren().add(arrow.getTestLine());
         relationship.setArrow(arrow);
+
+        relationship.getArrow().setOnMouseClicked(new RelationshipClickedEventHandler(relationship));
 
         // Relationship properly created, leave state
         leaveState();

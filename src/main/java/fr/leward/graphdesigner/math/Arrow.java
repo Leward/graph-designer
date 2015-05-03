@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -41,6 +42,8 @@ public class Arrow {
     private double arrowAngle = Math.toRadians(30);
     private double arrowLength = 10;
 
+    private EventHandler<MouseEvent> onMouseClicked;
+
     public Arrow(Relationship relationship) {
         this.relationship = relationship;
         buildShapes();
@@ -67,6 +70,13 @@ public class Arrow {
                 @Override
                 public void handle(RotateEvent event) {
                     log.debug("onRotate!");
+                }
+            });
+
+            // Label is a element that constitute the arrow object and is clickable
+            typeLabel.setOnMouseClicked(event -> {
+                if(onMouseClicked != null) {
+                    onMouseClicked.handle(event);
                 }
             });
         }
@@ -129,6 +139,12 @@ public class Arrow {
 
         if(line == null) {
             line = new Line();
+            // Line is a element that constitute the arrow object and is clickable
+            line.setOnMouseClicked(event -> {
+                if(onMouseClicked != null) {
+                    onMouseClicked.handle(event);
+                }
+            });
         }
 
         if(straightLine.getA() == Double.POSITIVE_INFINITY) {
@@ -161,6 +177,12 @@ public class Arrow {
             headPath = new Path();
             headPath.setFill(Color.BLACK);
             headPath.setFillRule(FillRule.EVEN_ODD);
+            // Head Path is a element that constitute the arrow object and is clickable
+            headPath.setOnMouseClicked(event -> {
+                if(onMouseClicked != null) {
+                    onMouseClicked.handle(event);
+                }
+            });
         }
 
         // Move To 1
@@ -261,4 +283,11 @@ public class Arrow {
         return typeLabel;
     }
 
+    public EventHandler<MouseEvent> getOnMouseClicked() {
+        return onMouseClicked;
+    }
+
+    public void setOnMouseClicked(EventHandler<MouseEvent> onMouseClicked) {
+        this.onMouseClicked = onMouseClicked;
+    }
 }

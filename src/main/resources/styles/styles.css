@@ -31,3 +31,8 @@
 .relationship-type-selection .relationship:hover .label {
     -fx-text-fill: white;
 }
+
+.relationship-selected {
+    -fx-stroke-width: 2px;
+    -fx-stroke: yellow;
+}
