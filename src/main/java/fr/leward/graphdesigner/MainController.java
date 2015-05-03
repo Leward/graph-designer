@@ -54,6 +54,7 @@ public class MainController implements Initializable {
     @FXML private ToggleButton createNodeButton;
     @FXML private ToggleButton createRelationshipButton;
     @FXML private Button manageLabelsButton;
+    @FXML private Button manageRelationshipsButton;
     @FXML private Label graphDataLabel;
     @FXML private VBox rightPane;
 
@@ -94,6 +95,7 @@ public class MainController implements Initializable {
         createNodeButton.setOnAction(onCreateNodeButtonAction);
         createRelationshipButton.setOnAction(onCreateRelationshipButtonAction);
         manageLabelsButton.setOnAction(onManageLabelsButtonAction);
+        manageRelationshipsButton.setOnAction(onManageRelationshipsButtonAction);
         pane.setOnMouseClicked(onPaneClicked);
         pane.setOnMouseMoved(onMouseMovedOnPane);
 
@@ -151,6 +153,24 @@ public class MainController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    };
+
+    private EventHandler<ActionEvent> onManageRelationshipsButtonAction = (event) -> {
+        try {
+            String fxmlFile = "/fxml/relationships.fxml";
+            FXMLLoader loader = new FXMLLoader();
+            Parent modalRoot = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(root.getScene().getWindow());
+            stage.setTitle("Relationships Manager");
+            stage.setScene(new Scene(modalRoot, 600, 400));
+            stage.setMinWidth(450.0);
+            stage.setMinHeight(250.0);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     };
 
