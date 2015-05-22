@@ -4,6 +4,7 @@ import fr.leward.graphdesigner.event.*;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
 import fr.leward.graphdesigner.event.bus.EventStream;
 import fr.leward.graphdesigner.event.bus.EventStreams;
+import fr.leward.graphdesigner.event.handler.GlobalOnKeyPressedEventHandler;
 import fr.leward.graphdesigner.graph.Graph;
 import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.graph.Relationship;
@@ -102,7 +103,7 @@ public class MainController implements Initializable {
         EventStreams.labelAddedEventStream.subscribe(labelAddedEventEventConsumer);
 
         // Listen for keyboard keys
-        root.setOnKeyPressed(globalOnKeyPressed);
+        root.setOnKeyPressed(new GlobalOnKeyPressedEventHandler());
     }
 
     private EventHandler<ActionEvent> onCreateNodeButtonAction = new EventHandler<ActionEvent>() {
@@ -226,52 +227,9 @@ public class MainController implements Initializable {
     };
 
     /**
-     * Global handling of keayboard events
-     */
-    private EventHandler<KeyEvent> globalOnKeyPressed = (event) -> {
-        if(event.getCode() == KeyCode.DELETE) {
-            deleteSelection();
-        }
-        else if(event.getCode() == KeyCode.N) {
-            if(!selection.isSelectionLocked() && !(stateManager.getState() instanceof AddNodeState)) {
-                // Leave current state
-                EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
-                // Enter add node state
-                createNodeButton.setSelected(true);
-                EventStreams.enterAddNodeStateEventStream.publish(new EnterAddNodeStateEvent());
-            }
-        }
-        else if(event.getCode() == KeyCode.R) {
-            if(!selection.isSelectionLocked() && !(stateManager.getState() instanceof AddRelationshipState)) {
-                // Leave current state
-                EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
-                // Enter add relationship state
-                createRelationshipButton.setSelected(true);
-                EventStreams.enterAddRelationshipStateEventStream.publish(new EnterAddRelationshipStateEvent());
-            }
-        }
-        else if(event.getCode() == KeyCode.ESCAPE) {
-            if(stateManager.getState() instanceof AddNodeState) {
-                // Leave current state
-                EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
-                createNodeButton.setSelected(false);
-                // Enter default state
-                EventStreams.enterDefaultStateEventStream.publish(new EnterDefaultStateEvent());
-            }
-            else if(stateManager.getState() instanceof AddRelationshipState) {
-                // Leave current state
-                EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
-                createRelationshipButton.setSelected(false);
-                // Enter default state
-                EventStreams.enterDefaultStateEventStream.publish(new EnterDefaultStateEvent());
-            }
-        }
-    };
-
-    /**
      * Delete the selected items
      */
-    private void deleteSelection() {
+    public void deleteSelection() {
         // When the selection is locked it should not be possible to remove selected items
         if(selection.isSelectionLocked()) {
             return;
