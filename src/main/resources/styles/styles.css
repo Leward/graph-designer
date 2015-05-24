@@ -19,6 +19,10 @@
     -fx-text-fill: white;
 }
 
+/**
+ * Relationship type selection
+ */
+
 .relationship-type-selection .relationship {
     -fx-padding: 3px;
     -fx-text-fill: black;
@@ -29,6 +33,14 @@
  }
 
 .relationship-type-selection .relationship:hover .label {
+    -fx-text-fill: white;
+}
+
+.relationship-type-selection .selected {
+    -fx-background-color: darkblue;
+}
+
+.relationship-type-selection .selected .label {
     -fx-text-fill: white;
 }
 

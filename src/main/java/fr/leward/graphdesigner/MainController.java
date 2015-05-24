@@ -277,6 +277,10 @@ public class MainController implements Initializable {
         return pane;
     }
 
+    public Parent getRoot() {
+        return root;
+    }
+
     public ToggleButton getCreateNodeButton() {
         return createNodeButton;
     }
