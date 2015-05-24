@@ -49,9 +49,10 @@ public class AddRelationshipState implements State {
 
     @Override
     public void leaveState() {
+        log.debug("Leave AddRelationshipState");
         // If add relationship is not complete when leaving the state remove the line we drew
-        if(endNode == null && line != null) {
-            MainController.getInstance().getPane().getChildren().removeAll(line);
+        if(relationshipType == null) {
+            MainController.getInstance().getPane().getChildren().removeAll(line, addRelationshipTypeSelection);
         }
 
         // Unlock the selection
