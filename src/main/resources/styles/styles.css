@@ -37,7 +37,7 @@
 }
 
 .relationship-type-selection .selected {
-    -fx-background-color: darkblue;
+    -fx-background-color: #393990;
 }
 
 .relationship-type-selection .selected .label {
