@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.applet.Main;
 
 /**
  * Created by Paul-Julien on 08/02/2015.

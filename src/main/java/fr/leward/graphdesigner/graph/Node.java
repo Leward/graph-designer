@@ -1,21 +1,18 @@
 package fr.leward.graphdesigner.graph;
 
-import com.sun.javafx.collections.ObservableMapWrapper;
 import fr.leward.graphdesigner.ui.SelectableItem;
-import javafx.beans.*;
-import javafx.beans.Observable;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.MapChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Paul-Julien on 01/02/2015.
@@ -30,7 +27,7 @@ public class Node implements SelectableItem {
     /**
      * Labels applied to the node
      */
-    private ObservableMap labels = new ObservableMapWrapper(new HashMap<String, Label>());
+    private ObservableMap<String, Label> labels = FXCollections.observableHashMap();
 
     /**
      * This boolean property (and observable) tells if further labels can be added to the node

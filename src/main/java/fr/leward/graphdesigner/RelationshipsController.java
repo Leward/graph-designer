@@ -2,7 +2,6 @@ package fr.leward.graphdesigner;
 
 import fr.leward.graphdesigner.event.handler.RelationshipTypeSelectedHandler;
 import fr.leward.graphdesigner.graph.RelationshipType;
-import fr.leward.graphdesigner.ui.LabelMenuEntry;
 import fr.leward.graphdesigner.ui.RelationshipMenuEntry;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -19,9 +18,10 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.soap.Text;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 public class RelationshipsController implements Initializable {
 
