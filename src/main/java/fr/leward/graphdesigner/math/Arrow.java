@@ -15,15 +15,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Arrow {
 
-    private static final Logger log = LoggerFactory.getLogger(Arrow.class);
+//    private static final Logger log = LoggerFactory.getLogger(Arrow.class);
 
     private Relationship relationship;
     private Line line;
@@ -69,7 +67,7 @@ public class Arrow {
             typeLabel.setOnRotate(new EventHandler<RotateEvent>() {
                 @Override
                 public void handle(RotateEvent event) {
-                    log.debug("onRotate!");
+//                    log.debug("onRotate!");
                 }
             });
 
@@ -111,7 +109,7 @@ public class Arrow {
         typeLabel.getTransforms().clear();
         typeLabel.getTransforms().add(rotate);
 
-        log.debug("Angle: " + Math.toDegrees(lineAngle));
+//        log.debug("Angle: " + Math.toDegrees(lineAngle));
 
     }
 

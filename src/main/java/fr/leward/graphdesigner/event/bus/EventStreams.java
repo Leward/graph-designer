@@ -2,8 +2,6 @@ package fr.leward.graphdesigner.event.bus;
 
 import fr.leward.graphdesigner.event.*;
 
-import java.awt.event.MouseEvent;
-
 /**
  * Created by Paul-Julien on 02/02/2015.
  */

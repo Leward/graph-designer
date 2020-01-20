@@ -3,9 +3,7 @@ package fr.leward.graphdesigner.state;
 import fr.leward.graphdesigner.event.EnterAddNodeStateEvent;
 import fr.leward.graphdesigner.event.EnterAddRelationshipStateEvent;
 import fr.leward.graphdesigner.event.EnterDefaultStateEvent;
-import fr.leward.graphdesigner.event.NodeClickedEvent;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
-import fr.leward.graphdesigner.event.bus.EventStream;
 import fr.leward.graphdesigner.event.bus.EventStreams;
 
 /**

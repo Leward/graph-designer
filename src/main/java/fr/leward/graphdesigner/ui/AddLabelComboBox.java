@@ -2,17 +2,13 @@ package fr.leward.graphdesigner.ui;
 
 import fr.leward.graphdesigner.graph.Graph;
 import fr.leward.graphdesigner.graph.Label;
-import fr.leward.graphdesigner.graph.Node;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Paul-Julien on 06/04/2015.
@@ -22,7 +18,7 @@ public class AddLabelComboBox extends HBox {
     private ComboBox<Label> comboBox;
     private Button cancelButton;
 
-    private static final Logger log = LoggerFactory.getLogger(AddLabelComboBox.class);
+//    private static final Logger log = LoggerFactory.getLogger(AddLabelComboBox.class);
 
     private Graph graph;
     private Selection selection;

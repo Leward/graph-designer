@@ -11,28 +11,24 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by Paul-Julien on 17/02/2015.
  */
 public class LabelsController implements Initializable {
 
-    private static final Logger log = LoggerFactory.getLogger(LabelsController.class);
+//    private static final Logger log = LoggerFactory.getLogger(LabelsController.class);
 
     @FXML private Parent root;
     @FXML private VBox labelsMenuContainer;

@@ -43,6 +43,9 @@
                 <version>0.0.3</version>
                 <configuration>
                     <mainClass>fr.leward.graphdesigner.MainApp</mainClass>
+                    <release>${maven.compiler.release}</release>
+                    <jlinkImageName>graph-editor</jlinkImageName>
+                    <launcher>launcher</launcher>
                     <!-- only required if signing the jar file -->
                     <!--<keyStoreAlias>example-user</keyStoreAlias>-->
                     <!--<keyStorePassword>example-password</keyStorePassword>-->
@@ -87,26 +90,26 @@
 
         <!-- Logging  -->
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.13.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-api</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>jcl-over-slf4j</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-log4j12</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.logging.log4j</groupId>-->
+<!--            <artifactId>log4j-core</artifactId>-->
+<!--            <version>2.13.0</version>-->
+<!--        </dependency>-->
 
         <!-- React FX -->
         <dependency>

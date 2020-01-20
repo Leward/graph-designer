@@ -2,7 +2,6 @@ package fr.leward.graphdesigner.graph;
 
 import fr.leward.graphdesigner.math.Arrow;
 import fr.leward.graphdesigner.ui.SelectableItem;
-import org.apache.commons.lang.NotImplementedException;
 
 public class Relationship implements SelectableItem {
 

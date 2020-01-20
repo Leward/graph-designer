@@ -15,8 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -25,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class RelationshipsController implements Initializable {
 
-    private static final Logger log = LoggerFactory.getLogger(RelationshipsController.class);
+//    private static final Logger log = LoggerFactory.getLogger(RelationshipsController.class);
 
     @FXML private Parent root;
     @FXML private VBox relationshipsMenuContainer;

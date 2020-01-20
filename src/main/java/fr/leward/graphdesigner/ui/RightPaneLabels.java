@@ -10,20 +10,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.EventListener;
 
 public class RightPaneLabels {
 
-    private static final Logger log = LoggerFactory.getLogger(RightPaneLabels.class);
+//    private static final Logger log = LoggerFactory.getLogger(RightPaneLabels.class);
 
     private Selection selection;
     private Button addLabelButton;

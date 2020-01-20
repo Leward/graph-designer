@@ -9,8 +9,6 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class Selection implements Observable {
 
-    private static final Logger log = LoggerFactory.getLogger(Selection.class);
+//    private static final Logger log = LoggerFactory.getLogger(Selection.class);
 
     private ObservableList<SelectableItem> selectedItems = FXCollections.observableArrayList();
     private ObservableList<Label> selectedLabels = FXCollections.observableArrayList();

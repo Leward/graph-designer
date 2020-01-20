@@ -4,12 +4,10 @@ import fr.leward.graphdesigner.graph.Node;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RightPaneUpdator {
 
-    private static final Logger log = LoggerFactory.getLogger(RightPaneLabels.class);
+//    private static final Logger log = LoggerFactory.getLogger(RightPaneLabels.class);
 
     private Pane rightPane;
     private Selection selection;
@@ -29,7 +27,7 @@ public class RightPaneUpdator {
 
     private void singleNodeSelected() {
         rightPane.getChildren().clear();
-        log.debug("Selection " + selection.getSelectedItems());
+//        log.debug("Selection " + selection.getSelectedItems());
         new RightPaneLabels(selection).build(rightPane);
     }
 
@@ -59,11 +57,11 @@ public class RightPaneUpdator {
      */
     private InvalidationListener selectionChangedListener = (observable) -> {
         if(selection.size() == 0) {
-            log.debug("Selection changed: switch right pane to empty state");
+//            log.debug("Selection changed: switch right pane to empty state");
             toEmptyState();
         }
         else if(selection.size() == 1) {
-            log.debug("Selection changed: switch right pane to single node selected");
+//            log.debug("Selection changed: switch right pane to single node selected");
             if(selection.getSelectedItems().get(0) instanceof Node) {
                 singleNodeSelected();
             }
@@ -72,7 +70,7 @@ public class RightPaneUpdator {
             }
         }
         else {
-            log.debug("Selection changed: switch right pane to multiple nodes selected");
+//            log.debug("Selection changed: switch right pane to multiple nodes selected");
             multipleNodesSelected();
         }
     };

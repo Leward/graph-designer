@@ -2,15 +2,12 @@ package fr.leward.graphdesigner;
 
 import fr.leward.graphdesigner.event.*;
 import fr.leward.graphdesigner.event.bus.EventConsumer;
-import fr.leward.graphdesigner.event.bus.EventStream;
 import fr.leward.graphdesigner.event.bus.EventStreams;
 import fr.leward.graphdesigner.event.handler.GlobalOnKeyPressedEventHandler;
 import fr.leward.graphdesigner.graph.Graph;
 import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.graph.Relationship;
 import fr.leward.graphdesigner.state.AddNodeState;
-import fr.leward.graphdesigner.state.AddRelationshipState;
-import fr.leward.graphdesigner.state.DefaultState;
 import fr.leward.graphdesigner.state.StateManager;
 import fr.leward.graphdesigner.ui.AddLabelComboBox;
 import fr.leward.graphdesigner.ui.RightPaneUpdator;
@@ -25,14 +22,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +35,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     // Logger
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+//    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     private static MainController instance;
     private Graph graph;
@@ -109,7 +103,7 @@ public class MainController implements Initializable {
     private EventHandler<ActionEvent> onCreateNodeButtonAction = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            log.debug("onCreateNodeButtonAction (" + createNodeButton.isSelected() + ")");
+//            log.debug("onCreateNodeButtonAction (" + createNodeButton.isSelected() + ")");
             if(stateManager.getState() instanceof AddNodeState) {
                 // Leave add node state
                 EventStreams.leaveAddNodeStateEventStream.publish(new LeaveAddNodeStateEvent());
@@ -125,7 +119,7 @@ public class MainController implements Initializable {
     private EventHandler<ActionEvent> onCreateRelationshipButtonAction = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            log.debug("onCreateRelationshipButtonAction (" + createRelationshipButton.isSelected() + ")");
+//            log.debug("onCreateRelationshipButtonAction (" + createRelationshipButton.isSelected() + ")");
             if(createRelationshipButton.isSelected()) {
                 EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
                 EventStreams.enterAddRelationshipStateEventStream.publish(new EnterAddRelationshipStateEvent());

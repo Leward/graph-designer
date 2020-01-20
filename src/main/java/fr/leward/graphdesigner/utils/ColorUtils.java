@@ -1,8 +1,6 @@
 package fr.leward.graphdesigner.utils;
 
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Paul-Julien on 05/04/2015.
@@ -10,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class ColorUtils {
 
     // Logger
-    private static final Logger log = LoggerFactory.getLogger(ColorUtils.class);
+//    private static final Logger log = LoggerFactory.getLogger(ColorUtils.class);
 
     /**
      * Transform a JavaFX Color object into a CSS hexadecimal String such as #FFFFFF

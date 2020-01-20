@@ -4,12 +4,9 @@ import fr.leward.graphdesigner.MainController;
 import fr.leward.graphdesigner.event.NodeClickedEvent;
 import fr.leward.graphdesigner.event.bus.EventStreams;
 import fr.leward.graphdesigner.graph.Node;
-import fr.leward.graphdesigner.ui.SelectableItem;
 import fr.leward.graphdesigner.ui.Selection;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Handler for node clicked event.
@@ -17,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeClickedEventHandler implements EventHandler<MouseEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(NodeClickedEventHandler.class);
+//    private static final Logger log = LoggerFactory.getLogger(NodeClickedEventHandler.class);
 
     private MainController mainController;
     private Node node;

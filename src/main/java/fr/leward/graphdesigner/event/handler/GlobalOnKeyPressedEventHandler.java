@@ -13,12 +13,10 @@ import fr.leward.graphdesigner.ui.Selection;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GlobalOnKeyPressedEventHandler implements EventHandler<KeyEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalOnKeyPressedEventHandler.class);
+//    private static final Logger log = LoggerFactory.getLogger(GlobalOnKeyPressedEventHandler.class);
 
     private MainController mainController;
     private Selection selection;

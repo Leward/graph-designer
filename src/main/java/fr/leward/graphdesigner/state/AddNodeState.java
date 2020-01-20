@@ -10,15 +10,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by Paul-Julien on 08/02/2015.
  */
 public class AddNodeState implements State {
 
-    private static final Logger log = LoggerFactory.getLogger(AddNodeState.class);
+//    private static final Logger log = LoggerFactory.getLogger(AddNodeState.class);
 
     @Override
     public void enterState() {
