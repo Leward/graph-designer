@@ -16,13 +16,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddRelationshipTypeSelection extends VBox {
 
-//    private static final Logger log = LoggerFactory.getLogger(AddRelationshipTypeSelection.class);
+    private static final Logger log = LoggerFactory.getLogger(AddRelationshipTypeSelection.class);
 
     private Graph graph;
     private Relationship relationship;
@@ -59,7 +61,7 @@ public class AddRelationshipTypeSelection extends VBox {
         textField.setPromptText("RELATED_TO");
         okButton = new Button("Ok");
         okButton.setOnAction((event) -> {
-//            log.debug("Ok Clicked");
+            log.debug("Ok Clicked");
             ok();
         });
         firstLine.getChildren().addAll(textField, okButton);
@@ -94,11 +96,11 @@ public class AddRelationshipTypeSelection extends VBox {
         }
 
         // Listen for keayboard events
-//        log.debug("Listen for keayboard events");
+        log.debug("Listen for keayboard events");
         Node root = MainController.getInstance().getRoot();
         root.addEventHandler(KeyEvent.KEY_PRESSED, onKeyPressedEventHandler);
         addEventHandler(MouseEvent.MOUSE_MOVED, (event) -> {
-//            log.debug("x:" + event.getX() + ", y:" + event.getY());
+            log.debug("x:" + event.getX() + ", y:" + event.getY());
         });
     }
 

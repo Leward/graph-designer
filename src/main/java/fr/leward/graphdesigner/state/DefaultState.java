@@ -11,6 +11,8 @@ import fr.leward.graphdesigner.graph.Node;
 import fr.leward.graphdesigner.graph.Relationship;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +22,14 @@ import java.util.List;
  */
 public class DefaultState implements State {
 
-//    private static final Logger log = LoggerFactory.getLogger(DefaultState.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultState.class);
 
     private List<Node> selectedNodes = new ArrayList<Node>();
     private boolean isDraging = false;
 
     @Override
     public void enterState() {
-//        log.debug("Enter Default State");
+        log.debug("Enter Default State");
         EventStreams.leaveCurrentStateEventStream.subscribe(leaveCurrentStateEventConsumer);
         EventStreams.nodeDraggedEventStream.subscribe(nodeDraggedEventConsumer);
 //        EventStreams.nodeClickedEventStream.subscribe(nodeClickedEventConsumer);
@@ -37,7 +39,7 @@ public class DefaultState implements State {
 
     @Override
     public void leaveState() {
-//        log.debug("Leave Default State");
+        log.debug("Leave Default State");
         if(selectedNodes.size() > 0) {
             for(Node node : selectedNodes) {
                 node.unselectNode();

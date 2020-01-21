@@ -27,6 +27,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +37,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     // Logger
-//    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     private static MainController instance;
     private Graph graph;
@@ -103,7 +105,7 @@ public class MainController implements Initializable {
     private EventHandler<ActionEvent> onCreateNodeButtonAction = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-//            log.debug("onCreateNodeButtonAction (" + createNodeButton.isSelected() + ")");
+            log.debug("onCreateNodeButtonAction (" + createNodeButton.isSelected() + ")");
             if(stateManager.getState() instanceof AddNodeState) {
                 // Leave add node state
                 EventStreams.leaveAddNodeStateEventStream.publish(new LeaveAddNodeStateEvent());
@@ -119,7 +121,7 @@ public class MainController implements Initializable {
     private EventHandler<ActionEvent> onCreateRelationshipButtonAction = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-//            log.debug("onCreateRelationshipButtonAction (" + createRelationshipButton.isSelected() + ")");
+            log.debug("onCreateRelationshipButtonAction (" + createRelationshipButton.isSelected() + ")");
             if(createRelationshipButton.isSelected()) {
                 EventStreams.leaveCurrentStateEventStream.publish(new LeaveCurrentStateEvent());
                 EventStreams.enterAddRelationshipStateEventStream.publish(new EnterAddRelationshipStateEvent());

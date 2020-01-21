@@ -16,10 +16,12 @@ import fr.leward.graphdesigner.ui.AddRelationshipTypeSelection;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AddRelationshipState implements State {
 
-//    private static final Logger log = LoggerFactory.getLogger(AddRelationshipState.class);
+    private static final Logger log = LoggerFactory.getLogger(AddRelationshipState.class);
 
     private Relationship relationship;
     private Node startNode;
@@ -30,7 +32,7 @@ public class AddRelationshipState implements State {
 
     @Override
     public void enterState() {
-//        log.debug("Enter AddRelationshipState");
+        log.debug("Enter AddRelationshipState");
 
         // Lock the selection
         MainController.getInstance().getSelection().lock();
@@ -47,7 +49,7 @@ public class AddRelationshipState implements State {
 
     @Override
     public void leaveState() {
-//        log.debug("Leave AddRelationshipState");
+        log.debug("Leave AddRelationshipState");
         // If add relationship is not complete when leaving the state remove the line we drew
         if(relationshipType == null) {
             MainController.getInstance().getPane().getChildren().removeAll(line, addRelationshipTypeSelection);
