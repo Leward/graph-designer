@@ -68,12 +68,7 @@ public class AddRelationshipState implements State {
         MainController.getInstance().leaveCurrentState();
     }
 
-    private EventConsumer<LeaveCurrentStateEvent> leaveCurrentStateEventConsumer = new EventConsumer<LeaveCurrentStateEvent>() {
-        @Override
-        public void consume(LeaveCurrentStateEvent event) {
-            leaveState();
-        }
-    };
+    private EventConsumer<LeaveCurrentStateEvent> leaveCurrentStateEventConsumer = event -> leaveState();
 
     private EventConsumer<NodeClickedEvent> nodeClickedEventConsumer = new EventConsumer<NodeClickedEvent>() {
         @Override
@@ -134,14 +129,11 @@ public class AddRelationshipState implements State {
         MainController.getInstance().getPane().getChildren().add(addRelationshipTypeSelection);
     }
 
-    private EventConsumer<GraphPaneMouseMovedEvent> graphPaneMouseMovedEventConsumer = new EventConsumer<GraphPaneMouseMovedEvent>() {
-        @Override
-        public void consume(GraphPaneMouseMovedEvent event) {
-            if(startNode != null && endNode == null) {
-                MouseEvent mouseEvent = event.getMouseEvent();
-                line.setEndX(mouseEvent.getX());
-                line.setEndY(mouseEvent.getY());
-            }
+    private EventConsumer<GraphPaneMouseMovedEvent> graphPaneMouseMovedEventConsumer = event -> {
+        if (startNode != null && endNode == null) {
+            MouseEvent mouseEvent = event.getMouseEvent();
+            line.setEndX(mouseEvent.getX());
+            line.setEndY(mouseEvent.getY());
         }
     };
 
