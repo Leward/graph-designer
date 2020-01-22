@@ -130,12 +130,19 @@ public class AddRelationshipState implements State {
     }
 
     private EventConsumer<GraphPaneMouseMovedEvent> graphPaneMouseMovedEventConsumer = event -> {
-        if (startNode != null && endNode == null) {
-            MouseEvent mouseEvent = event.getMouseEvent();
-            line.setEndX(mouseEvent.getX());
-            line.setEndY(mouseEvent.getY());
+        if (isSelectingEndNode()) {
+            moveLineToMouseCursor(event.getMouseEvent());
         }
     };
+
+    public boolean isSelectingEndNode() {
+        return startNode != null && endNode == null;
+    }
+
+    public void moveLineToMouseCursor(MouseEvent mouseEvent) {
+        line.setEndX(mouseEvent.getX());
+        line.setEndY(mouseEvent.getY());
+    }
 
     public Node getStartNode() {
         return startNode;
