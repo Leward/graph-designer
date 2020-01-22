@@ -69,7 +69,7 @@ public class MainController implements Initializable {
 
     /**
      * Used to keep track during click event if a node is being dragged
-     * or actually ciecked
+     * or actually clicked
      */
     private boolean draggedNodeDetected = false;
 
