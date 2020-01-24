@@ -113,7 +113,7 @@ public class AddRelationshipTypeSelection extends VBox {
         secondLine = new VBox();
         secondLine.getStyleClass().add("relationship-types");
         graph.getRelationshipTypes().forEach(relationshipType -> {
-            AddRelationshipTypeEntry relationshipTypeEntry = new AddRelationshipTypeEntry(relationshipType);
+            var relationshipTypeEntry = new AddRelationshipTypeEntry(relationshipType);
             secondLine.getChildren().add(relationshipTypeEntry);
             relationshipTypeEntry.setOnMouseClicked(mouseEvent -> {
                 ok(relationshipType);
@@ -125,11 +125,12 @@ public class AddRelationshipTypeSelection extends VBox {
         // When the selected relationship changes
         selectedRelastionshipType.addListener((observable) -> {
             textField.setText(selectedRelastionshipType.get().getName());
-            for (AddRelationshipTypeEntry relationshipTypeEntry : relationshipTypeEntries.values()) {
-                if (relationshipTypeEntry.getRelationshipType() != selectedRelastionshipType.getValue()) {
-                    relationshipTypeEntry.unselect();
-                }
-            }
+
+            // Unselect all non selected relationships
+            relationshipTypeEntries.values().stream()
+                    .filter(it -> it.getRelationshipType() != selectedRelastionshipType.getValue())
+                    .forEach(AddRelationshipTypeEntry::unselect);
+
             relationshipTypeEntries.get(selectedRelastionshipType.getValue()).select();
         });
 
