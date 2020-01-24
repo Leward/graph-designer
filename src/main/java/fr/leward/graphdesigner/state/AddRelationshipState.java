@@ -127,6 +127,7 @@ public class AddRelationshipState implements State {
         addRelationshipTypeSelection.setLayoutX(mouseEvent.getX());
         addRelationshipTypeSelection.setLayoutY(mouseEvent.getY());
         MainController.getInstance().getPane().getChildren().add(addRelationshipTypeSelection);
+        addRelationshipTypeSelection.requestFocus(); // can only be done after adding the node to a scene
     }
 
     private EventConsumer<GraphPaneMouseMovedEvent> graphPaneMouseMovedEventConsumer = event -> {

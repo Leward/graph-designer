@@ -1,19 +1,14 @@
 package fr.leward.graphdesigner.ui;
 
-import fr.leward.graphdesigner.MainController;
 import fr.leward.graphdesigner.event.handler.RelationshipTypeSelectedHandler;
 import fr.leward.graphdesigner.graph.Graph;
 import fr.leward.graphdesigner.graph.Relationship;
 import fr.leward.graphdesigner.graph.RelationshipType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -71,7 +66,12 @@ public class AddRelationshipTypeSelection extends VBox {
     private Map<RelationshipType, AddRelationshipTypeEntry> relationshipTypeEntries = new HashMap<>();
 
     /**
-     * Text field allowing to create a new relationship type on the go
+     * Text field allowing to create a new relationship type on the go.
+     *
+     * This is also the element on which keyboard events are bound to in order to switch between existing relationship
+     * types and handling of the ENTER key.
+     *
+     * This node is focusable, a focusing this component leads to focusing the text field.
      */
     private TextField textField;
 
@@ -141,11 +141,7 @@ public class AddRelationshipTypeSelection extends VBox {
 
         // Listen for keyboard events
         log.debug("Listen for keayboard events");
-        Node root = MainController.getInstance().getRoot();
-        root.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
-        addEventHandler(MouseEvent.MOUSE_MOVED, (event) -> {
-            log.debug("x:" + event.getX() + ", y:" + event.getY());
-        });
+        textField.setOnKeyPressed(this::handleKeyPress);
     }
 
     protected void ok(String selectedType) {
@@ -175,7 +171,6 @@ public class AddRelationshipTypeSelection extends VBox {
     }
 
     private void handleKeyPress(KeyEvent event) {
-        // TODO: Enter key is not working well, because the focus is kept on the buttons at the top.
         switch (event.getCode()) {
             case PAGE_DOWN: case DOWN:
                 handleDownKey();
@@ -207,5 +202,10 @@ public class AddRelationshipTypeSelection extends VBox {
 
     private void handleEnterKey() {
         ok();
+    }
+
+    @Override
+    public void requestFocus() {
+        textField.requestFocus();
     }
 }
