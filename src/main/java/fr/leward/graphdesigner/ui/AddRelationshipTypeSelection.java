@@ -22,19 +22,62 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A box which appears after selecting the second node of a relationship.
+ * It allows to pick the type of the relationship being created.
+ *
+ * <pre>
+ *      +-------------------------------+
+ *      | ________________________      |
+ *      | |_______________________|  OK |    <- textbox allow to add a new relationship type on the fly
+ *      |                               |
+ *      |   Rel Type 1                  |    <- a clickable, existing relationship type
+ *      |   Rel Type 2                  |
+ *      +-------------------------------|
+ *
+ * </pre>
+ *
+ * When the relationship type is selected, `onRelationshipSelectedHandler` is called.
+ */
 public class AddRelationshipTypeSelection extends VBox {
 
     private static final Logger log = LoggerFactory.getLogger(AddRelationshipTypeSelection.class);
 
+    /**
+     * The Graph object.
+     */
     private Graph graph;
+
+    /**
+     * The Relationship (edge) being created.
+     */
     private Relationship relationship;
+
+    /**
+     * Handler to call when the relationship type has been selected.
+     */
     private RelationshipTypeSelectedHandler onRelationshipSelectedHandler;
 
+    /**
+     * First (upper) block containing the text field and OK button
+     */
     private HBox firstLine;
+
+    /**
+     * Second (lower) containing the a selectable list of existing relationships
+     */
     private VBox secondLine;
+
     private Map<RelationshipType, AddRelationshipTypeEntry> relationshipTypeEntries = new HashMap<>();
 
+    /**
+     * Text field allowing to create a new relationship type on the go
+     */
     private TextField textField;
+
+    /**
+     * Button to confirm the textField
+     */
     private Button okButton;
 
     /**
