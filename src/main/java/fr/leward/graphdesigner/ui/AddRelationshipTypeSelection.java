@@ -139,7 +139,7 @@ public class AddRelationshipTypeSelection extends VBox {
             selectedRelastionshipType.setValue(graph.getRelationshipTypes().get(0));
         }
 
-        // Listen for keayboard events
+        // Listen for keyboard events
         log.debug("Listen for keayboard events");
         Node root = MainController.getInstance().getRoot();
         root.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
@@ -148,10 +148,6 @@ public class AddRelationshipTypeSelection extends VBox {
         });
     }
 
-    /**
-     *
-     * @param selectedType
-     */
     protected void ok(String selectedType) {
         if(selectedType.trim().isEmpty()) {
             return;
@@ -164,19 +160,12 @@ public class AddRelationshipTypeSelection extends VBox {
         ok(relationshipType);
     }
 
-    /**
-     *
-     * @param relationshipType
-     */
     protected void ok(RelationshipType relationshipType) {
         if(onRelationshipSelectedHandler != null) {
             onRelationshipSelectedHandler.handle(relationshipType);
         }
     }
 
-    /**
-     *
-     */
     protected void ok() {
         ok(textField.getText());
     }
