@@ -28,7 +28,7 @@ public class MainApp extends Application {
 
         log.debug("Showing JFX scene");
         Scene scene = new Scene(rootNode, 800, 600);
-        scene.getStylesheets().add("/styles/styles.css");
+        scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
         stage.setTitle("Graph Editor");
         stage.getIcons().add(new Image(getClass().getResource("/images/social_graph-256.png").toExternalForm()));
