@@ -70,25 +70,21 @@ public class AddRelationshipState implements State {
 
     private EventConsumer<LeaveCurrentStateEvent> leaveCurrentStateEventConsumer = event -> leaveState();
 
-    private EventConsumer<NodeClickedEvent> nodeClickedEventConsumer = new EventConsumer<NodeClickedEvent>() {
-        @Override
-        public void consume(NodeClickedEvent event) {
-            if(startNode == null) {
-                startNode = event.getNode();
-                double lineX = startNode.getCircle().getCenterX();
-                double lineY = startNode.getCircle().getCenterY();
-                line = new Line(lineX, lineY, lineX, lineY);
-                MainController mainController = MainController.getInstance();
-                mainController.getPane().getChildren().add(line);
-                line.toBack();
-            }
-            else if(endNode == null) {
-                endNode = event.getNode();
-                line.setEndX(endNode.getCircle().getCenterX());
-                line.setEndY(endNode.getCircle().getCenterY());
+    private EventConsumer<NodeClickedEvent> nodeClickedEventConsumer = (NodeClickedEvent event) -> {
+        if (startNode == null) {
+            startNode = event.getNode();
+            double lineX = startNode.getCircle().getCenterX();
+            double lineY = startNode.getCircle().getCenterY();
+            line = new Line(lineX, lineY, lineX, lineY);
+            MainController mainController = MainController.getInstance();
+            mainController.getPane().getChildren().add(line);
+            line.toBack();
+        } else if (endNode == null) {
+            endNode = event.getNode();
+            line.setEndX(endNode.getCircle().getCenterX());
+            line.setEndY(endNode.getCircle().getCenterY());
 
-                selectRelationshipType(event);
-            }
+            selectRelationshipType(event);
         }
     };
 
