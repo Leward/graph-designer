@@ -180,10 +180,6 @@ public class AddRelationshipTypeSelection extends VBox {
         ok(textField.getText());
     }
 
-    /**
-     *
-     * @param onRelationshipSelectedHandler
-     */
     public void setOnRelationshipSelectedHandler(RelationshipTypeSelectedHandler onRelationshipSelectedHandler) {
         this.onRelationshipSelectedHandler = onRelationshipSelectedHandler;
     }
