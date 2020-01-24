@@ -11,6 +11,7 @@ Graph Designer is a WYSIWYG tool to prototype property graphes. It mainly target
 
 Graph Designer is a JavaFX application. It runs on the Desktop and should be compatible the major operating systems supporting Java 13+.
 
+![Screenshot](screenshot.png)
 
 ## How to build and run the project ##
 
