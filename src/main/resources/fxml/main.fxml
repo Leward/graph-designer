@@ -17,36 +17,24 @@
     <!--</left>-->
     <top>
         <VBox BorderPane.alignment="CENTER">
-            <children>
-                <MenuBar>
-                    <menus>
-                        <Menu mnemonicParsing="false" text="File">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Close" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Delete" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
-                            </items>
-                        </Menu>
-                    </menus>
-                </MenuBar>
-                <ToolBar prefHeight="40.0" prefWidth="200.0">
-                    <items>
-                        <ToggleButton mnemonicParsing="false" text="Create Node" fx:id="createNodeButton" />
-                        <ToggleButton mnemonicParsing="false" text="Create Relationship" fx:id="createRelationshipButton" />
-                        <Separator orientation="VERTICAL" />
-                        <Button text="Manage Labels" fx:id="manageLabelsButton" />
-                        <Button text="Manage Relationships" fx:id="manageRelationshipsButton" />
-                    </items>
-                </ToolBar>
-            </children>
+            <MenuBar>
+                <Menu mnemonicParsing="false" text="File">
+                    <MenuItem mnemonicParsing="false" text="Close"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <MenuItem mnemonicParsing="false" text="Delete"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <MenuItem mnemonicParsing="false" text="About"/>
+                </Menu>
+            </MenuBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+                <ToggleButton mnemonicParsing="false" text="Create Node" fx:id="createNodeButton"/>
+                <ToggleButton mnemonicParsing="false" text="Create Relationship" fx:id="createRelationshipButton"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="Manage Labels" fx:id="manageLabelsButton"/>
+                <Button text="Manage Relationships" fx:id="manageRelationshipsButton"/>
+            </ToolBar>
         </VBox>
     </top>
     <center>
@@ -55,32 +43,28 @@
     </center>
     <right>
         <VBox fx:id="rightPane" prefWidth="200.0" style="-fx-background-color: lightsteelblue; -fx-padding: 5px;">
-            <children>
-                <!--<HBox alignment="CENTER_LEFT">-->
-                    <!--<children>-->
-                        <!--<Label text="Select a node or a relationship" />-->
-                        <!--<Label text="Label: " />-->
-                        <!--<ComboBox fx:id="selectedNodeLabelComboBox">-->
-                            <!--<items>-->
-                                <!--<FXCollections fx:factory="observableArrayList">-->
-                                    <!--<String fx:value="User" />-->
-                                    <!--<String fx:value="File" />-->
-                                    <!--<String fx:value="Folder" />-->
-                                    <!--<String fx:value="SharedFile" />-->
-                                    <!--<String fx:value="SharedFolder" />-->
-                                <!--</FXCollections>-->
-                            <!--</items>-->
-                        <!--</ComboBox>-->
-                    <!--</children>-->
-                <!--</HBox>-->
-            </children>
+            <!--<HBox alignment="CENTER_LEFT">-->
+            <!--<children>-->
+            <!--<Label text="Select a node or a relationship" />-->
+            <!--<Label text="Label: " />-->
+            <!--<ComboBox fx:id="selectedNodeLabelComboBox">-->
+            <!--<items>-->
+            <!--<FXCollections fx:factory="observableArrayList">-->
+            <!--<String fx:value="User" />-->
+            <!--<String fx:value="File" />-->
+            <!--<String fx:value="Folder" />-->
+            <!--<String fx:value="SharedFile" />-->
+            <!--<String fx:value="SharedFolder" />-->
+            <!--</FXCollections>-->
+            <!--</items>-->
+            <!--</ComboBox>-->
+            <!--</children>-->
+            <!--</HBox>-->
         </VBox>
     </right>
     <bottom>
         <HBox>
-            <children>
-                <Label fx:id="graphDataLabel" text="Graph data: 0 node | 0 relationship | 0 label | 0 relationship type" />
-            </children>
+            <Label fx:id="graphDataLabel" text="Graph data: 0 node | 0 relationship | 0 label | 0 relationship type"/>
         </HBox>
     </bottom>
 
