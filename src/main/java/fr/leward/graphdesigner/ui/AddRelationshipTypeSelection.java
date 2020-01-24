@@ -142,7 +142,7 @@ public class AddRelationshipTypeSelection extends VBox {
         // Listen for keayboard events
         log.debug("Listen for keayboard events");
         Node root = MainController.getInstance().getRoot();
-        root.addEventHandler(KeyEvent.KEY_PRESSED, onKeyPressedEventHandler);
+        root.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
         addEventHandler(MouseEvent.MOUSE_MOVED, (event) -> {
             log.debug("x:" + event.getX() + ", y:" + event.getY());
         });
@@ -185,23 +185,38 @@ public class AddRelationshipTypeSelection extends VBox {
         this.onRelationshipSelectedHandler = onRelationshipSelectedHandler;
     }
 
-    private EventHandler<KeyEvent> onKeyPressedEventHandler = (event) -> {
-        if(event.getCode() == KeyCode.PAGE_DOWN) {
-            int indexOfSelected = graph.getRelationshipTypes().indexOf(selectedRelastionshipType.get());
-            if(indexOfSelected < relationshipTypeEntries.size() - 1) {
-                RelationshipType relationshipTypeToSelect = graph.getRelationshipTypes().get(indexOfSelected + 1);
-                selectedRelastionshipType.setValue(relationshipTypeToSelect);
-            }
+    private void handleKeyPress(KeyEvent event) {
+        // TODO: Enter key is not working well, because the focus is kept on the buttons at the top.
+        switch (event.getCode()) {
+            case PAGE_DOWN: case DOWN:
+                handleDownKey();
+                break;
+            case PAGE_UP: case UP:
+                handleUpKey();
+                break;
+            case ENTER:
+                handleEnterKey();
+                break;
         }
-        else if(event.getCode() == KeyCode.PAGE_UP) {
-            int indexOfSelected = graph.getRelationshipTypes().indexOf(selectedRelastionshipType.get());
-            if(indexOfSelected > 0) {
-                RelationshipType relationshipTypeToSelect = graph.getRelationshipTypes().get(indexOfSelected - 1);
-                selectedRelastionshipType.setValue(relationshipTypeToSelect);
-            }
+    }
+
+    private void handleDownKey() {
+        int indexOfSelected = graph.getRelationshipTypes().indexOf(selectedRelastionshipType.get());
+        if(indexOfSelected < relationshipTypeEntries.size() - 1) {
+            RelationshipType relationshipTypeToSelect = graph.getRelationshipTypes().get(indexOfSelected + 1);
+            selectedRelastionshipType.setValue(relationshipTypeToSelect);
         }
-        else if(event.getCode() == KeyCode.ENTER) {
-            ok();
+    }
+
+    private void handleUpKey() {
+        int indexOfSelected = graph.getRelationshipTypes().indexOf(selectedRelastionshipType.get());
+        if(indexOfSelected > 0) {
+            RelationshipType relationshipTypeToSelect = graph.getRelationshipTypes().get(indexOfSelected - 1);
+            selectedRelastionshipType.setValue(relationshipTypeToSelect);
         }
-    };
+    }
+
+    private void handleEnterKey() {
+        ok();
+    }
 }
