@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class Graph {
 
-    private Long lastIdUsed = new Long(0);
+    private long lastIdUsed = 0;
     private Collection<Node> nodes = new ArrayList<Node>();
     private Collection<Relationship> relationships = new ArrayList<Relationship>();
     private Map<String, Label> labels = new HashMap<String, Label>();
