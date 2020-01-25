@@ -8,7 +8,8 @@
 <?import javafx.scene.layout.*?>
 
 
-<BorderPane fx:id="root" fx:controller="fr.leward.graphdesigner.LabelsController" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/styles/styles.css">
+<!-- Set the controller in the code (see LabelManagerDemo).  -->
+<BorderPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <left>
         <VBox prefHeight="400.0" prefWidth="150.0" style="-fx-background-color: lavender;" BorderPane.alignment="CENTER">
             <children>

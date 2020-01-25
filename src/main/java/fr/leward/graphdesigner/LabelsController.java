@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * Created by Paul-Julien on 17/02/2015.
  */
-public class LabelsController implements Initializable {
+public class LabelsController {
 
 //    private static final Logger log = LoggerFactory.getLogger(LabelsController.class);
 
@@ -39,6 +39,8 @@ public class LabelsController implements Initializable {
 
     @FXML private TextField labelNameTextField;
     @FXML private ColorPicker labelColorPicker;
+
+    private Graph graph;
 
     /**
      * Keep track of whether the selected label is being edited and has some value changed
@@ -55,8 +57,11 @@ public class LabelsController implements Initializable {
      */
     private Label selectedLabel;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public LabelsController(Graph graph) {
+        this.graph = graph;
+    }
+
+    public void initialize() {
         // Bind Events
         newLabelHBox.setOnMouseClicked(newLabelHBoxClicked);
         okButton.setOnAction(onOkButtonAction);
@@ -65,7 +70,7 @@ public class LabelsController implements Initializable {
         labelColorPicker.valueProperty().addListener(labelFormChangeListener);
 
         // Init labels and left menu
-        Collection<Label> labels = MainController.getInstance().getGraph().getLabels();
+        Collection<Label> labels = graph.getLabels();
         for(Label label : labels) {
             LabelMenuEntry labelMenuEntry = new LabelMenuEntry(label, onLabelHBoxClicked);
             labelMenuEntries.put(label, labelMenuEntry);
@@ -189,7 +194,6 @@ public class LabelsController implements Initializable {
     private EventHandler<ActionEvent> onOkButtonAction = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-            Graph graph = MainController.getInstance().getGraph();
             if(selectedLabel == null) {
                 Label label = new Label(labelNameTextField.getText(), labelColorPicker.getValue());
                 graph.addLabel(label);
@@ -214,19 +218,10 @@ public class LabelsController implements Initializable {
         }
     };
 
-    private EventHandler<ActionEvent> onCloseButtonAction = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.close();
-        }
+    private EventHandler<ActionEvent> onCloseButtonAction = (ActionEvent event) -> {
+        Stage stage = (Stage) root.getScene().getWindow();
+        stage.close();
     };
 
-    public EventHandler<ActionEvent> onCancelButtonAction = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-
-        }
-    };
-
+    public EventHandler<ActionEvent> onCancelButtonAction = event -> {};
 }

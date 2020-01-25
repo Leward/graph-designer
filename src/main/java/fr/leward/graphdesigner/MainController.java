@@ -132,25 +132,27 @@ public class MainController implements Initializable {
         }
     };
 
-    private EventHandler<ActionEvent> onManageLabelsButtonAction = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            try {
-                String fxmlFile = "/fxml/labels.fxml";
-                FXMLLoader loader = new FXMLLoader();
-                Parent modalRoot = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
-                Stage stage = new Stage();
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(root.getScene().getWindow());
-                stage.setTitle("Labels Manager");
-                stage.setScene(new Scene(modalRoot, 600, 400));
-                stage.setMinWidth(450.0);
-                stage.setMinHeight(250.0);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private EventHandler<ActionEvent> onManageLabelsButtonAction = (ActionEvent event) -> {
+        var labelsController = new LabelsController(graph);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setController(labelsController);
+        Parent modalRoot;
+        try {
+            modalRoot = loader.load(getClass().getResourceAsStream("/fxml/labels.fxml"));
+        } catch (IOException e) {
+            log.error("Can't load labels manager", e);
+            return;
         }
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(root.getScene().getWindow());
+        stage.setTitle("Labels Manager");
+        stage.setScene(new Scene(modalRoot, 600, 400));
+        stage.setMinWidth(450.0);
+        stage.setMinHeight(250.0);
+        stage.show();
     };
 
     private EventHandler<ActionEvent> onManageRelationshipsButtonAction = (event) -> {
