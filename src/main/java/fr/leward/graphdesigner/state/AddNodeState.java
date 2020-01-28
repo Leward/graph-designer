@@ -37,31 +37,19 @@ public class AddNodeState implements State {
         MainController.getInstance().leaveCurrentState();
     }
 
-    private EventConsumer<LeaveCurrentStateEvent> leaveCurrentStateEventConsumer = new EventConsumer<LeaveCurrentStateEvent>() {
-        @Override
-        public void consume(LeaveCurrentStateEvent event) {
-            leaveState();
-        }
-    };
+    private EventConsumer<LeaveCurrentStateEvent> leaveCurrentStateEventConsumer = event -> leaveState();
 
-    private EventConsumer<LeaveAddNodeStateEvent> leaveAddNodeStateEventConsumer = new EventConsumer<LeaveAddNodeStateEvent>() {
-        @Override
-        public void consume(LeaveAddNodeStateEvent event) {
-            leaveState();
-        }
-    };
+    private EventConsumer<LeaveAddNodeStateEvent> leaveAddNodeStateEventConsumer = event -> leaveState();
 
-    private EventConsumer<GraphPaneClickedEvent> graphPaneClickedEventConsumer = new EventConsumer<GraphPaneClickedEvent>() {
-        @Override
-        public void consume(GraphPaneClickedEvent event) {
-            // Create the shape to be used
-            MouseEvent mouseEvent = event.getMouseEvent();
-            Circle circle = new Circle(mouseEvent.getX(), mouseEvent.getY(), 20);
-            circle.setCursor(Cursor.HAND);
+    private EventConsumer<GraphPaneClickedEvent> graphPaneClickedEventConsumer = event -> {
+        // Create the shape to be used
+        MouseEvent mouseEvent = event.getMouseEvent();
+        Circle circle = new Circle(mouseEvent.getX(), mouseEvent.getY(), 20);
+        circle.setCursor(Cursor.HAND);
 
-            // Create the node
-            final Node node = new Node();
-            node.setCircle(circle);
+        // Create the node
+        final Node node = new Node();
+        node.setCircle(circle);
 
 //            circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //                @Override
@@ -70,31 +58,30 @@ public class AddNodeState implements State {
 //                    EventStreams.nodeClickedEventStream.publish(new NodeClickedEvent(node, event));
 //                }
 //            });
-            circle.setOnMouseClicked(new NodeClickedEventHandler(node));
-            circle.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    EventStreams.nodeDraggedEventStream.publish(new NodeDraggedEvent(node, event));
-                }
-            });
-            circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    EventStreams.mouseEnterNodeEventStream.publish(new MouseEnterNodeEvent(node, event));
-                }
-            });
-            circle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    EventStreams.mouseLeaveNodeEventEventStream.publish(new MouseLeaveNodeEvent(node, event));
-                }
-            });
-            MainController.getInstance().getPane().getChildren().add(circle);
-            node.setId(MainController.getInstance().getGraph().generateId());
-            MainController.getInstance().getGraph().addNode(node);
-            // Leave the state
-            leaveState();
-        }
+        circle.setOnMouseClicked(new NodeClickedEventHandler(node));
+        circle.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                EventStreams.nodeDraggedEventStream.publish(new NodeDraggedEvent(node, event));
+            }
+        });
+        circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                EventStreams.mouseEnterNodeEventStream.publish(new MouseEnterNodeEvent(node, event));
+            }
+        });
+        circle.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                EventStreams.mouseLeaveNodeEventEventStream.publish(new MouseLeaveNodeEvent(node, event));
+            }
+        });
+        MainController.getInstance().getPane().getChildren().add(circle);
+        node.setId(MainController.getInstance().getGraph().generateId());
+        MainController.getInstance().getGraph().addNode(node);
+        // Leave the state
+        leaveState();
     };
 
 }
