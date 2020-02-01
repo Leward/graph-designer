@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>graph-designer</artifactId>
+        <groupId>fr.leward</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>graph-editor-app</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.3</version>
+                <configuration>
+                    <mainClass>fr.leward.graphdesigner.MainApp</mainClass>
+                    <release>${maven.compiler.release}</release>
+                    <jlinkImageName>graph-editor</jlinkImageName>
+                    <launcher>launcher</launcher>
+                    <!-- only required if signing the jar file -->
+                    <!--<keyStoreAlias>example-user</keyStoreAlias>-->
+                    <!--<keyStorePassword>example-password</keyStorePassword>-->
+                    <!--<allPermissions>true</allPermissions>-->
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-javafx</artifactId>
+            <version>4.2</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

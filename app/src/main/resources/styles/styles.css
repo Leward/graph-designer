@@ -1,0 +1,50 @@
+.left-menu-item {
+    -fx-background-color: inherit;
+    -fx-font-size: 14px;
+}
+
+.left-menu-item:hover {
+    -fx-background-color: lightgrey;
+}
+
+.left-menu-item-selected {
+    -fx-background-color: darkblue;
+}
+
+.left-menu-item-selected:hover {
+    -fx-background-color: darkblue;
+}
+
+.left-menu-item-selected .label {
+    -fx-text-fill: white;
+}
+
+/**
+ * Relationship type selection
+ */
+
+.relationship-type-selection .relationship {
+    -fx-padding: 3px;
+    -fx-text-fill: black;
+}
+
+.relationship-type-selection .relationship:hover {
+     -fx-background-color: darkblue;
+ }
+
+.relationship-type-selection .relationship:hover .label {
+    -fx-text-fill: white;
+}
+
+.relationship-type-selection .selected {
+    -fx-background-color: #393990;
+}
+
+.relationship-type-selection .selected .label {
+    -fx-text-fill: white;
+}
+
+.relationship-selected {
+    -fx-stroke-width: 2px;
+    -fx-stroke: yellow;
+}

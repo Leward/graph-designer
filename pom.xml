@@ -7,8 +7,13 @@
     <groupId>fr.leward</groupId>
     <artifactId>graph-designer</artifactId>
     <name>graph-designer</name>
+    <modules>
+        <module>drawing-pane</module>
+        <module>graph-editor-core</module>
+        <module>app</module>
+    </modules>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <organization>
@@ -36,59 +41,26 @@
                     <release>${maven.compiler.release}</release>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.3</version>
-                <configuration>
-                    <mainClass>fr.leward.graphdesigner.MainApp</mainClass>
-                    <release>${maven.compiler.release}</release>
-                    <jlinkImageName>graph-editor</jlinkImageName>
-                    <launcher>launcher</launcher>
-                    <!-- only required if signing the jar file -->
-                    <!--<keyStoreAlias>example-user</keyStoreAlias>-->
-                    <!--<keyStorePassword>example-password</keyStorePassword>-->
-                    <!--<allPermissions>true</allPermissions>-->
-
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>13.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>13.0.2</version>
-        </dependency>
-
-        <!-- MigLayout -->
-
-        <dependency>
-            <groupId>com.miglayout</groupId>
-            <artifactId>miglayout-javafx</artifactId>
-            <version>4.2</version>
-        </dependency>
-
-        <!-- Apache Commons -->
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-
-        <!-- Logging  -->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -103,6 +75,11 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
 
     </dependencies>
 
