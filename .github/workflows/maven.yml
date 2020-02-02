@@ -13,7 +13,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.13
-    - name: Build modules with Maven
-      run: mvn -B package
+    - name: Build and test modules with Maven
+      run: mvn -B test
     - name: Build app with Maven
       run: mvn -B javafx:jlink -pl app
