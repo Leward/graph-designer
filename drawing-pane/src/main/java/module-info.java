@@ -3,4 +3,5 @@ module graph.designer.drawing.pane {
     requires graph.editor.core;
 
     exports fr.leward.graphdesigner.ui.drawingpane.demo;
+    exports fr.leward.graphdesigner.ui.drawingpane;
 }

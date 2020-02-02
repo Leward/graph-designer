@@ -15,13 +15,12 @@ public class DrawingPaneDemo extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
         AtomicInteger nextID = new AtomicInteger(0);
         IdGenerator generator = nextID::incrementAndGet;
 
         var drawingPane = new DrawingPane(generator); // this will the the root pane
         var scene = new Scene(drawingPane, 400, 400);
-
 
         var a = drawingPane.addNode(30, 30);
         var b = drawingPane.addNode(100, 60);
@@ -34,6 +33,5 @@ public class DrawingPaneDemo extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
-
     }
 }
