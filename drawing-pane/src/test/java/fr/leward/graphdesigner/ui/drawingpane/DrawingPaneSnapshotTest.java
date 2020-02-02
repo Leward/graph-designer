@@ -29,7 +29,7 @@ public class DrawingPaneSnapshotTest extends ApplicationTest {
     }
 
     @Test
-    void testSomething() throws IOException {
+    void testSnapshot() throws IOException {
         interact(() -> {
             var a = drawingPane.addNode(30, 30);
             var b = drawingPane.addNode(100, 60);
