@@ -23,8 +23,8 @@ public class DrawingPaneDemo extends Application {
         var scene = new Scene(drawingPane, 400, 400);
 
         var a = drawingPane.addNode(30, 30);
-        var b = drawingPane.addNode(100, 60);
-        var c = drawingPane.addNode(90, 160);
+        var b = drawingPane.addNode(150, 90);
+        var c = drawingPane.addNode(135, 240);
 
         drawingPane.addRelationship(a, b);
         drawingPane.addRelationship(b, c);

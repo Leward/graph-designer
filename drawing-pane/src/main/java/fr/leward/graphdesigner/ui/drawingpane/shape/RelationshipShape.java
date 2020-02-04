@@ -1,10 +1,17 @@
 package fr.leward.graphdesigner.ui.drawingpane.shape;
 
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 public class RelationshipShape {
 
@@ -15,14 +22,44 @@ public class RelationshipShape {
 
     private final Line line;
 
+    private final String type = "IS_A";
+    private Label label;
+    private final Dimension2D labelDimention;
+
     public RelationshipShape(long id, NodeShape start, NodeShape end) {
         this.id = id;
         this.start = start;
         this.end = end;
         line = new Line(start.getCenter().getX(), start.getCenter().getY(), end.getCenter().getX(), end.getCenter().getY());
+
+        label = new Label(type);
+        label.setStyle("-fx-background-color: white; -fx-opacity: 1.0; ");
+        labelDimention = calculateNodeDimensions(label);
+
+        // Angle computes the angle between TWO VECTORS both originating at (0, 0)
+        // The following allows to get the angle between two points
+        //  new Point2D(1, 0) is the horizontal vector of size one going to the right (the x axis)
+        // see: https://stackoverflow.com/questions/30906542/how-is-the-point2d-angle-method-to-be-understood
+        double angle = new Point2D(1, 0).angle(end.getCenter().subtract(start.getCenter()));
+        double distance = start.getCenter().distance(end.getCenter());
+        var midpoint = start.getCenter().midpoint(end.getCenter());
+        label.setLayoutX(midpoint.getX() - (labelDimention.getWidth() / 2));
+        label.setLayoutY(midpoint.getY() - (labelDimention.getHeight() / 2));
+        label.setRotate(angle);
     }
 
     public Collection<Node> getDrawables() {
-        return Collections.singletonList(line);
+        return List.of(line, label);
+    }
+
+    private Dimension2D calculateNodeDimensions(Control control) {
+        Stage stage = new Stage();
+        Group root = new Group();
+        root.getChildren().add(control);
+        stage.setScene(new Scene(root));
+        stage.show();
+        stage.close();
+
+        return new Dimension2D(control.getWidth(), control.getHeight());
     }
 }
