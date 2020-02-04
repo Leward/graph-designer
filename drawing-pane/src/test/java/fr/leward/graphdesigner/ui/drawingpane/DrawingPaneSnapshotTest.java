@@ -40,7 +40,7 @@ public class DrawingPaneSnapshotTest extends ApplicationTest {
 
             snapshot = new Snapshot(scene, "drawing-pane-1");
         });
-        // snapshot.saveSnapshot(); // Uncomment to save and register an expected change
+//         snapshot.saveSnapshot(); // Uncomment to save and register an expected change
         snapshot.saveDebugSnapshot();
         snapshot.assertSnapshotRemainsUnchanged();
     }

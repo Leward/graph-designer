@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
@@ -26,11 +28,18 @@ public class RelationshipShape {
     private Label label;
     private final Dimension2D labelDimention;
 
+    private final Circle debugEndAnchorPoint;
+
     public RelationshipShape(long id, NodeShape start, NodeShape end) {
         this.id = id;
         this.start = start;
         this.end = end;
-        line = new Line(start.getCenter().getX(), start.getCenter().getY(), end.getCenter().getX(), end.getCenter().getY());
+
+        var startAnchorPoint = start.getOuterPointTowards(end.getCenter());
+        var endAnchorPoint = end.getOuterPointTowards(start.getCenter());
+
+        line = new Line(startAnchorPoint.getX(), startAnchorPoint.getY(), endAnchorPoint.getX(), endAnchorPoint.getY());
+
 
         label = new Label(type);
         label.setStyle("-fx-background-color: white; -fx-opacity: 1.0; ");
@@ -46,10 +55,13 @@ public class RelationshipShape {
         label.setLayoutX(midpoint.getX() - (labelDimention.getWidth() / 2));
         label.setLayoutY(midpoint.getY() - (labelDimention.getHeight() / 2));
         label.setRotate(angle);
+
+        debugEndAnchorPoint = new Circle(endAnchorPoint.getX(), endAnchorPoint.getY(), 5);
+        debugEndAnchorPoint.setFill(Color.PURPLE);
     }
 
     public Collection<Node> getDrawables() {
-        return List.of(line, label);
+        return List.of(line, label, debugEndAnchorPoint);
     }
 
     private Dimension2D calculateNodeDimensions(Control control) {

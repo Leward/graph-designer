@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.fail;
 
@@ -24,12 +26,12 @@ public class Snapshot {
 
     public void saveSnapshot() throws IOException {
         var bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-        ImageIO.write(bufferedImage, "png", getSnapshotFile());
+        ImageIO.write(bufferedImage, "png", getSnapshotFilePath().toFile());
     }
 
     public void saveDebugSnapshot() throws IOException {
         var bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-        ImageIO.write(bufferedImage, "png", getDebugSnapshotFile());
+        ImageIO.write(bufferedImage, "png", getDebugSnapshotPath().toFile());
     }
 
     public void assertSnapshotRemainsUnchanged() {
@@ -51,18 +53,16 @@ public class Snapshot {
     }
 
     private Image getSavedSnapshot() {
-        return new Image(String.format("file:%s", getSnapshotFilePath()));
+        return new Image(String.format("file:%s", getSnapshotFilePath().toAbsolutePath()));
     }
 
-    private File getSnapshotFile() {
-        return new File(getSnapshotFilePath());
+    private Path getSnapshotFilePath() {
+        var fileName = String.format("snapshots/%s.png", name);
+        return Paths.get(System.getProperty("user.dir"), fileName);
     }
 
-    private String getSnapshotFilePath() {
-        return String.format("snapshots/%s.png", name);
-    }
-
-    private File getDebugSnapshotFile() {
-        return new File(String.format("snapshots/%s.debug.png", name));
+    private Path getDebugSnapshotPath() {
+        var fileName = String.format("snapshots/%s.debug.png", name);
+        return Paths.get(System.getProperty("user.dir"), fileName);
     }
 }
