@@ -22,7 +22,7 @@ public class RelationshipShape {
     private final NodeShape start;
     private final NodeShape end;
 
-    private final Line line;
+    private final Arrow arrow;
 
     private final String type = "IS_A";
     private Label label;
@@ -38,8 +38,7 @@ public class RelationshipShape {
         var startAnchorPoint = start.getOuterPointTowards(end.getCenter());
         var endAnchorPoint = end.getOuterPointTowards(start.getCenter());
 
-        line = new Line(startAnchorPoint.getX(), startAnchorPoint.getY(), endAnchorPoint.getX(), endAnchorPoint.getY());
-
+        arrow = new Arrow(startAnchorPoint, endAnchorPoint);
 
         label = new Label(type);
         label.setStyle("-fx-background-color: white; -fx-opacity: 1.0; ");
@@ -61,7 +60,9 @@ public class RelationshipShape {
     }
 
     public Collection<Node> getDrawables() {
-        return List.of(line, label, debugEndAnchorPoint);
+        var list = arrow.getDrawables();
+        list.add(label);
+        return list;
     }
 
     private Dimension2D calculateNodeDimensions(Control control) {
