@@ -1,8 +1,11 @@
 package fr.leward.graphdesigner.ui.drawingpane;
 
 import fr.leward.graphdesigner.core.IdGenerator;
+import fr.leward.graphdesigner.ui.drawingpane.event.NodeClickedEvent;
+import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -23,6 +26,16 @@ public class DrawingPane extends Pane {
 
     private Set<NodeShape> nodeShapes = new HashSet<>();
 
+    /**
+     * Handler to call when a node has been clicked.
+     */
+    private EventHandler<NodeClickedEvent> onNodeClickedHandler;
+
+    /**
+     * Handler to call when a relationship has been clicked.
+     */
+    private EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler;
+
     public DrawingPane(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
@@ -37,6 +50,7 @@ public class DrawingPane extends Pane {
         var nodeShape = new NodeShape(idGenerator.nextId(), x, y);
         nodeShapes.add(nodeShape);
         getChildren().addAll(nodeShape.getDrawables());
+        nodeShape.setOnNodeClicked(this::handleNodeClicked);
         return nodeShape.id;
     }
 
@@ -73,6 +87,9 @@ public class DrawingPane extends Pane {
         }
     }
 
+    // Handlers for nodes internal to the drawing panes.
+    // The internals of the drawing pane is not exposed outside of it.
+
     public void handleNodeClick() {
         boolean isCtrlClick = false;
     }
@@ -89,4 +106,19 @@ public class DrawingPane extends Pane {
     public void handleMouseMoved(MouseEvent event) {
     }
 
+    public void handleNodeClicked(NodeClickedEvent event) {
+        if(onNodeClickedHandler != null) {
+            onNodeClickedHandler.handle(event);
+        }
+    }
+
+    // Setters from External Event Handlers
+
+    public void setOnNodeClickedHandler(EventHandler<NodeClickedEvent> onNodeClickedHandler) {
+        this.onNodeClickedHandler = onNodeClickedHandler;
+    }
+
+    public void setOnRelationshipClickedHandler(EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler) {
+        this.onRelationshipClickedHandler = onRelationshipClickedHandler;
+    }
 }

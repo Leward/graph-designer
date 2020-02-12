@@ -1,5 +1,7 @@
 package fr.leward.graphdesigner.ui.drawingpane.shape;
 
+import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -7,13 +9,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.util.Collection;
-import java.util.List;
 
 public class RelationshipShape {
 
@@ -29,6 +30,8 @@ public class RelationshipShape {
     private final Dimension2D labelDimention;
 
     private final Circle debugEndAnchorPoint;
+
+    private EventHandler<RelationshipClickedEvent> onRelationshipClicked;
 
     public RelationshipShape(long id, NodeShape start, NodeShape end) {
         this.id = id;
@@ -74,5 +77,15 @@ public class RelationshipShape {
         stage.close();
 
         return new Dimension2D(control.getWidth(), control.getHeight());
+    }
+
+    public void handleMouseClick(MouseEvent event) {
+        if(onRelationshipClicked != null) {
+            onRelationshipClicked.handle(new RelationshipClickedEvent(id, event));
+        }
+    }
+
+    public void setOnRelationshipClicked(EventHandler<RelationshipClickedEvent> onRelationshipClicked) {
+        this.onRelationshipClicked = onRelationshipClicked;
     }
 }
