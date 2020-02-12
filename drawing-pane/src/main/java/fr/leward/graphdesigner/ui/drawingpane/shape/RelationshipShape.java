@@ -60,6 +60,10 @@ public class RelationshipShape {
 
         debugEndAnchorPoint = new Circle(endAnchorPoint.getX(), endAnchorPoint.getY(), 5);
         debugEndAnchorPoint.setFill(Color.PURPLE);
+
+        // Attach Mouse Click events
+        label.setOnMouseClicked(this::handleMouseClick);
+        arrow.setOnMouseClicked(this::handleMouseClick);
     }
 
     public Collection<Node> getDrawables() {

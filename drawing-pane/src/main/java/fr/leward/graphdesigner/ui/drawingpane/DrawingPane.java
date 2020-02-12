@@ -63,11 +63,13 @@ public class DrawingPane extends Pane {
     /**
      * Programmatically add a relationship to the pane (not drawn manually by the user)
      */
-    public void addRelationship(long startId, long endId) {
+    public long addRelationship(long startId, long endId) {
         NodeShape startNode = getNodeShape(startId);
         NodeShape endNode = getNodeShape(endId);
         var relationshipShape = new RelationshipShape(idGenerator.nextId(), startNode, endNode);
         getChildren().addAll(relationshipShape.getDrawables());
+        relationshipShape.setOnRelationshipClicked(this::handleRelationshipClicked);
+        return relationshipShape.id;
     }
 
     private NodeShape getNodeShape(long id) throws IllegalArgumentException {
@@ -109,6 +111,12 @@ public class DrawingPane extends Pane {
     public void handleNodeClicked(NodeClickedEvent event) {
         if(onNodeClickedHandler != null) {
             onNodeClickedHandler.handle(event);
+        }
+    }
+
+    public void handleRelationshipClicked(RelationshipClickedEvent event) {
+        if(onRelationshipClickedHandler != null) {
+            onRelationshipClickedHandler.handle(event);
         }
     }
 

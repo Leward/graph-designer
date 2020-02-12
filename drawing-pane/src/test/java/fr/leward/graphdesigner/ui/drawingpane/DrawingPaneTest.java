@@ -26,6 +26,9 @@ public class DrawingPaneTest {
 
     private long nodeA;
     private long nodeB;
+    private long nodeC;
+
+    private long relA;
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
@@ -40,6 +43,9 @@ public class DrawingPaneTest {
 
         nodeA = drawingPane.addNode(50, 50);
         nodeB = drawingPane.addNode(200, 200);
+        nodeC = drawingPane.addNode(250, 50); // 100px to the right of Node A
+
+        relA = drawingPane.addRelationship(nodeA, nodeC);
 
         scene = new Scene(new StackPane(drawingPane), 500, 500);
         stage.setScene(scene);
@@ -67,9 +73,12 @@ public class DrawingPaneTest {
         return robot.clickOn(point);
     }
 
-//    @Test
-//    public void testRelationshipClickedEvent() {
-//      // TODO: Implement test
-//    }
+    @Test
+    public void testRelationshipClickedEvent(FxRobot robot) {
+        var clickedRelationship = new AtomicLong(-1);
+        drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
+        this.clickAt(robot, 150, 50); // in the middle of node A and node C
+        Assertions.assertEquals(relA, clickedRelationship.get());
+    }
 
 }
