@@ -65,20 +65,23 @@ public class DrawingPaneTest {
         Assertions.assertEquals(nodeA, clickedNode.get());
     }
 
-    private FxRobotInterface clickAt(FxRobot robot, double x, double y) {
-        var point = robot.point(scene)
-                .atPosition(Pos.TOP_LEFT)
-                .atOffset(x, y)
-                .query();
-        return robot.clickOn(point);
-    }
-
     @Test
     public void testRelationshipClickedEvent(FxRobot robot) {
         var clickedRelationship = new AtomicLong(-1);
         drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
         this.clickAt(robot, 150, 50); // in the middle of node A and node C
         Assertions.assertEquals(relA, clickedRelationship.get());
+    }
+
+    /**
+     * Triggers a click at the (x,y) coordinates where (0,0) is the top-left corner of the drawing pane.
+     */
+    private FxRobotInterface clickAt(FxRobot robot, double x, double y) {
+        var point = robot.point(scene)
+                .atPosition(Pos.TOP_LEFT)
+                .atOffset(x, y)
+                .query();
+        return robot.clickOn(point);
     }
 
 }
