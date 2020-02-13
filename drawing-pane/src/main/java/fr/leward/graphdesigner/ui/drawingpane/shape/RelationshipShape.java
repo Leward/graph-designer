@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class RelationshipShape {
@@ -67,7 +68,8 @@ public class RelationshipShape {
     }
 
     public Collection<Node> getDrawables() {
-        var list = arrow.getDrawables();
+        var list = new ArrayList<Node>();
+        list.add(arrow);
         list.add(label);
         return list;
     }
