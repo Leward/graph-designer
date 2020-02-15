@@ -22,7 +22,11 @@ public class DrawingPane extends Pane {
 
     // TODO: Selection
 
-    // TODO: Start Node and End Node for relationship
+    /**
+     * Used when drawing a relationship ({@link #mode} == {@link DrawingPaneMode#ADD_RELATIONSHIP}) to keep track
+     * of the first node having been selected, while proceeding to the selection of the next node.
+     */
+    private long startNode;
 
     private Set<NodeShape> nodeShapes = new HashSet<>();
 
@@ -76,10 +80,13 @@ public class DrawingPane extends Pane {
 
     public void switchMode(DrawingPaneMode mode) {
         this.mode = mode;
+
+        // Reset some values
+        startNode = 0;
     }
 
     public void leaveMode() {
-        this.mode = DrawingPaneMode.DEFAULT;
+        this.switchMode(DrawingPaneMode.DEFAULT);
     }
 
     public void handlePaneClick(MouseEvent event) {
@@ -89,13 +96,22 @@ public class DrawingPane extends Pane {
     }
 
     public void handleNodeClicked(NodeClickedEvent event) {
-        if(onNodeClickedHandler != null) {
+        if (onNodeClickedHandler != null) {
             onNodeClickedHandler.handle(event);
+        }
+
+        if(mode == DrawingPaneMode.ADD_RELATIONSHIP) {
+            if(startNode == 0) {
+                startNode = event.id;
+            } else {
+                long endNode = event.id;
+                addRelationship(startNode, endNode);
+            }
         }
     }
 
     public void handleRelationshipClicked(RelationshipClickedEvent event) {
-        if(onRelationshipClickedHandler != null) {
+        if (onRelationshipClickedHandler != null) {
             onRelationshipClickedHandler.handle(event);
         }
     }
