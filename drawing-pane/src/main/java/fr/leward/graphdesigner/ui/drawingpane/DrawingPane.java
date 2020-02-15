@@ -54,8 +54,9 @@ public class DrawingPane extends Pane {
     public long addNode(double x, double y) {
         var nodeShape = new NodeShape(idGenerator.nextId(), x, y);
         nodeShapes.add(nodeShape);
-        getChildren().addAll(nodeShape.getDrawables());
+        getChildren().add(nodeShape);
         nodeShape.setOnNodeClicked(this::handleNodeClicked);
+        nodeShape.setOnMouseDragged(event -> this.handleNodeDrag(nodeShape, event));
         return nodeShape.id;
     }
 
@@ -108,6 +109,11 @@ public class DrawingPane extends Pane {
                 addRelationship(startNode, endNode);
             }
         }
+    }
+
+    public void handleNodeDrag(NodeShape nodeShape, MouseEvent event) {
+        nodeShape.setCenterX(event.getX());
+        nodeShape.setCenterY(event.getY());
     }
 
     public void handleRelationshipClicked(RelationshipClickedEvent event) {

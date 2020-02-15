@@ -4,9 +4,9 @@ import fr.leward.graphdesigner.core.IdGenerator;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -16,6 +16,8 @@ import org.testfx.framework.junit5.Start;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(ApplicationExtension.class)
 public class DrawingPaneTest {
@@ -68,7 +70,7 @@ public class DrawingPaneTest {
             clickedNode.set(event.id);
         });
         this.clickAt(robot, 50, 50); // Node A is at position 50, 50
-        Assertions.assertEquals(nodeA, clickedNode.get());
+        assertEquals(nodeA, clickedNode.get());
     }
 
     @Test
@@ -76,7 +78,7 @@ public class DrawingPaneTest {
         var clickedRelationship = new AtomicLong(-1);
         drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
         this.clickAt(robot, 150, 50); // in the middle of node A and node C
-        Assertions.assertEquals(relA, clickedRelationship.get());
+        assertEquals(relA, clickedRelationship.get());
     }
 
     @Test
@@ -92,7 +94,7 @@ public class DrawingPaneTest {
         // Click the select the new Node
         drawingPane.setOnNodeClickedHandler(event -> clickedNode.set(event.id));
         clickAt(robot, 100, 100);
-        Assertions.assertEquals(expectedNextNodeId, clickedNode.get());
+        assertEquals(expectedNextNodeId, clickedNode.get());
     }
 
     @Test
@@ -109,18 +111,40 @@ public class DrawingPaneTest {
         drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
         var midPoint = pointA.midpoint(pointB);
         clickAt(robot, midPoint.getX(), midPoint.getY());
-        Assertions.assertEquals(expectedRelationshipId, clickedRelationship.get());
+        assertEquals(expectedRelationshipId, clickedRelationship.get());
+    }
+
+    @Test
+    public void testMoveNode(FxRobot robot) {
+        Point2D newPointB = new Point2D(300, 200);
+
+        var dragStart = getPointAt(robot, pointB.getX(), pointB.getY());
+        var dragEnd = getPointAt(robot, newPointB.getX(), newPointB.getY());
+        robot.drag(dragStart, MouseButton.PRIMARY).dropTo(dragEnd);
+
+        var clickedNode = new AtomicLong(-1);
+        drawingPane.setOnNodeClickedHandler(event -> {
+            clickedNode.set(event.id);
+        });
+
+        this.clickAt(robot, 300, 200);
+        assertEquals(nodeB, clickedNode.get());
     }
 
     /**
      * Triggers a click at the (x,y) coordinates where (0,0) is the top-left corner of the drawing pane.
      */
     private FxRobotInterface clickAt(FxRobot robot, double x, double y) {
-        var point = robot.point(scene)
+        var point = getPointAt(robot, x, y);
+        return robot.clickOn(point);
+    }
+
+    private Point2D getPointAt(FxRobot robot, double x, double y) {
+        return robot.point(scene)
                 .atPosition(Pos.TOP_LEFT)
                 .atOffset(x, y)
                 .query();
-        return robot.clickOn(point);
     }
+
 
 }
