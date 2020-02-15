@@ -21,6 +21,7 @@ public class DrawingPaneTest {
 
     private Scene scene;
 
+    private AtomicInteger nextID = new AtomicInteger(0);
     private IdGenerator generator;
     private DrawingPane drawingPane;
 
@@ -37,7 +38,7 @@ public class DrawingPaneTest {
      */
     @Start
     private void start(Stage stage) {
-        AtomicInteger nextID = new AtomicInteger(0);
+        nextID = new AtomicInteger(0);
         generator = nextID::incrementAndGet;
         drawingPane = new DrawingPane(generator);
 
@@ -71,6 +72,22 @@ public class DrawingPaneTest {
         drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
         this.clickAt(robot, 150, 50); // in the middle of node A and node C
         Assertions.assertEquals(relA, clickedRelationship.get());
+    }
+
+    @Test
+    public void testClickToAddANode(FxRobot robot) {
+        var expectedNextNodeId = nextID.get() + 1;
+        var clickedNode = new AtomicLong(-1);
+
+        // Click to add Node
+        drawingPane.switchMode(DrawingPaneMode.ADD_NODE);
+        clickAt(robot, 100, 100);
+        drawingPane.leaveMode();
+
+        // Click the select the new Node
+        drawingPane.setOnNodeClickedHandler(event -> clickedNode.set(event.id));
+        clickAt(robot, 100, 100);
+        Assertions.assertEquals(expectedNextNodeId, clickedNode.get());
     }
 
     /**

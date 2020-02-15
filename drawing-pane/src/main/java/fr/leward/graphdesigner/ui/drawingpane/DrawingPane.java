@@ -38,6 +38,7 @@ public class DrawingPane extends Pane {
 
     public DrawingPane(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
+        setOnMouseClicked(this::handlePaneClick);
     }
 
     /**
@@ -52,12 +53,6 @@ public class DrawingPane extends Pane {
         getChildren().addAll(nodeShape.getDrawables());
         nodeShape.setOnNodeClicked(this::handleNodeClicked);
         return nodeShape.id;
-    }
-
-    /**
-     * Add a node from a user click in the pane
-     **/
-    private void addNode(MouseEvent event) {
     }
 
     /**
@@ -83,29 +78,14 @@ public class DrawingPane extends Pane {
         this.mode = mode;
     }
 
+    public void leaveMode() {
+        this.mode = DrawingPaneMode.DEFAULT;
+    }
+
     public void handlePaneClick(MouseEvent event) {
         if (mode == DrawingPaneMode.ADD_NODE) {
-            addNode(event);
+            addNode(event.getX(), event.getY());
         }
-    }
-
-    // Handlers for nodes internal to the drawing panes.
-    // The internals of the drawing pane is not exposed outside of it.
-
-    public void handleNodeClick() {
-        boolean isCtrlClick = false;
-    }
-
-    public void handleNodeClick(MouseEvent event) {
-    }
-
-    public void handleNodeDragged() {
-    }
-
-    public void handleRelationshipDragged() {
-    }
-
-    public void handleMouseMoved(MouseEvent event) {
     }
 
     public void handleNodeClicked(NodeClickedEvent event) {
