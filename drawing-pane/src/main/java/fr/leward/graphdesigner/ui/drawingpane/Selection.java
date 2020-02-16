@@ -11,14 +11,16 @@ public class Selection {
     Set<Long> relationships = new HashSet<>();
 
     public Selection selectNode(long node) {
-        nodes = Set.of(node);
-        relationships = new HashSet<>();
+        nodes.clear();
+        nodes.add(node);
+        relationships.clear();
         return this;
     }
 
     public Selection selectRelationship(long relationship) {
-        nodes = new HashSet<>();
-        relationships = Set.of(relationship);
+        nodes.clear();
+        relationships.clear();
+        relationships.add(relationship);
         return this;
     }
 

@@ -4,6 +4,7 @@ import fr.leward.graphdesigner.core.IdGenerator;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -137,6 +138,16 @@ public class DrawingPaneTest {
     public void testSelectASingleNode(FxRobot robot) {
         this.clickAt(robot, pointA.getX(), pointA.getY());
         assertTrue(drawingPane.isNodeSelected(nodeA));
+    }
+
+    @Test
+    public void testSelectTwoNodes(FxRobot robot) {
+        this.clickAt(robot, pointA.getX(), pointA.getY());
+        robot.press(KeyCode.CONTROL);
+        this.clickAt(robot, pointB.getX(), pointB.getY());
+        robot.release(KeyCode.CONTROL);
+        assertTrue(drawingPane.isNodeSelected(nodeA));
+        assertTrue(drawingPane.isNodeSelected(nodeB));
     }
 
     /**

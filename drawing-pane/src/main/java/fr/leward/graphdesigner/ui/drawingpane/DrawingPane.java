@@ -6,6 +6,8 @@ import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -40,9 +42,15 @@ public class DrawingPane extends Pane {
      */
     private EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler;
 
+    private boolean ctrlKeyPressed;
+
     public DrawingPane(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
+        setFocusTraversable(true);
         setOnMouseClicked(this::handlePaneClick);
+        setOnKeyPressed(this::handleKeyPressed);
+        setOnKeyReleased(this::handleKeyReleased);
+        requestFocus();
     }
 
     /**
@@ -102,7 +110,12 @@ public class DrawingPane extends Pane {
         }
 
         if(mode == DrawingPaneMode.DEFAULT) {
-            selection.selectNode(event.id);
+            System.out.printf("Node %d clicked (ctrlKeyPressed=%s) %n", event.id, ctrlKeyPressed);
+            if(ctrlKeyPressed) {
+                selection.addNodeToSelection(event.id);
+            } else {
+                selection.selectNode(event.id);
+            }
         }
 
         if(mode == DrawingPaneMode.ADD_RELATIONSHIP) {
@@ -123,6 +136,20 @@ public class DrawingPane extends Pane {
     public void handleRelationshipClicked(RelationshipClickedEvent event) {
         if (onRelationshipClickedHandler != null) {
             onRelationshipClickedHandler.handle(event);
+        }
+    }
+
+    public void handleKeyPressed(KeyEvent event) {
+        if(event.getCode() == KeyCode.CONTROL) {
+            System.out.println("CTRL pressed");
+            ctrlKeyPressed = true;
+        }
+    }
+
+    public void handleKeyReleased(KeyEvent event) {
+        if(event.getCode() == KeyCode.CONTROL) {
+            System.out.println("CTRL released");
+            ctrlKeyPressed = false;
         }
     }
 
