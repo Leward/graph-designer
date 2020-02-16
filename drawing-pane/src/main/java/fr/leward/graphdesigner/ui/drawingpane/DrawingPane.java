@@ -110,7 +110,6 @@ public class DrawingPane extends Pane {
         }
 
         if(mode == DrawingPaneMode.DEFAULT) {
-            System.out.printf("Node %d clicked (ctrlKeyPressed=%s) %n", event.id, ctrlKeyPressed);
             if(ctrlKeyPressed) {
                 selection.addNodeToSelection(event.id);
             } else {
@@ -141,14 +140,12 @@ public class DrawingPane extends Pane {
 
     public void handleKeyPressed(KeyEvent event) {
         if(event.getCode() == KeyCode.CONTROL) {
-            System.out.println("CTRL pressed");
             ctrlKeyPressed = true;
         }
     }
 
     public void handleKeyReleased(KeyEvent event) {
         if(event.getCode() == KeyCode.CONTROL) {
-            System.out.println("CTRL released");
             ctrlKeyPressed = false;
         }
     }
