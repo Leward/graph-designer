@@ -20,7 +20,7 @@ public class DrawingPane extends Pane {
 
     private DrawingPaneMode mode = DrawingPaneMode.DEFAULT;
 
-    // TODO: Selection
+    private Selection selection = new Selection();
 
     /**
      * Used when drawing a relationship ({@link #mode} == {@link DrawingPaneMode#ADD_RELATIONSHIP}) to keep track
@@ -101,6 +101,10 @@ public class DrawingPane extends Pane {
             onNodeClickedHandler.handle(event);
         }
 
+        if(mode == DrawingPaneMode.DEFAULT) {
+            selection.selectNode(event.id);
+        }
+
         if(mode == DrawingPaneMode.ADD_RELATIONSHIP) {
             if(startNode == 0) {
                 startNode = event.id;
@@ -130,5 +134,13 @@ public class DrawingPane extends Pane {
 
     public void setOnRelationshipClickedHandler(EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler) {
         this.onRelationshipClickedHandler = onRelationshipClickedHandler;
+    }
+
+    public boolean isNodeSelected(long node) {
+        return selection.hasNode(node);
+    }
+
+    public boolean isRelationshipSelected(long relationship) {
+        return selection.hasRelationship(relationship);
     }
 }

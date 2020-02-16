@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(ApplicationExtension.class)
 public class DrawingPaneTest {
@@ -129,6 +131,12 @@ public class DrawingPaneTest {
 
         this.clickAt(robot, 300, 200);
         assertEquals(nodeB, clickedNode.get());
+    }
+
+    @Test
+    public void testSelectASingleNode(FxRobot robot) {
+        this.clickAt(robot, pointA.getX(), pointA.getY());
+        assertTrue(drawingPane.isNodeSelected(nodeA));
     }
 
     /**
