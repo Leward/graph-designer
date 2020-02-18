@@ -30,8 +30,6 @@ public class RelationshipShape {
     private Label label;
     private final Dimension2D labelDimention;
 
-    private final Circle debugEndAnchorPoint;
-
     private EventHandler<RelationshipClickedEvent> onRelationshipClicked;
 
     public RelationshipShape(long id, NodeShape start, NodeShape end) {
@@ -39,32 +37,34 @@ public class RelationshipShape {
         this.start = start;
         this.end = end;
 
-        var startAnchorPoint = start.getOuterPointTowards(end.getCenter());
-        var endAnchorPoint = end.getOuterPointTowards(start.getCenter());
-
-        arrow = new Arrow(startAnchorPoint, endAnchorPoint);
+        arrow = new Arrow();
 
         label = new Label(type);
         label.setStyle("-fx-background-color: white; -fx-opacity: 1.0; ");
         labelDimention = calculateNodeDimensions(label);
+
+       update();
+
+        // Attach Mouse Click events
+        label.setOnMouseClicked(this::handleMouseClick);
+        arrow.setOnMouseClicked(this::handleMouseClick);
+    }
+
+    public void update() {
+        var startAnchorPoint = start.getOuterPointTowards(end.getCenter());
+        var endAnchorPoint = end.getOuterPointTowards(start.getCenter());
+        arrow.update(startAnchorPoint, endAnchorPoint);
 
         // Angle computes the angle between TWO VECTORS both originating at (0, 0)
         // The following allows to get the angle between two points
         //  new Point2D(1, 0) is the horizontal vector of size one going to the right (the x axis)
         // see: https://stackoverflow.com/questions/30906542/how-is-the-point2d-angle-method-to-be-understood
         double angle = new Point2D(1, 0).angle(end.getCenter().subtract(start.getCenter()));
-        double distance = start.getCenter().distance(end.getCenter());
         var midpoint = start.getCenter().midpoint(end.getCenter());
         label.setLayoutX(midpoint.getX() - (labelDimention.getWidth() / 2));
         label.setLayoutY(midpoint.getY() - (labelDimention.getHeight() / 2));
         label.setRotate(angle);
 
-        debugEndAnchorPoint = new Circle(endAnchorPoint.getX(), endAnchorPoint.getY(), 5);
-        debugEndAnchorPoint.setFill(Color.PURPLE);
-
-        // Attach Mouse Click events
-        label.setOnMouseClicked(this::handleMouseClick);
-        arrow.setOnMouseClicked(this::handleMouseClick);
     }
 
     public Collection<Node> getDrawables() {
@@ -93,5 +93,9 @@ public class RelationshipShape {
 
     public void setOnRelationshipClicked(EventHandler<RelationshipClickedEvent> onRelationshipClicked) {
         this.onRelationshipClicked = onRelationshipClicked;
+    }
+
+    public boolean hasNode(long id) {
+        return start.id == id || end.id == id;
     }
 }

@@ -5,8 +5,6 @@ import fr.leward.graphdesigner.ui.drawingpane.event.NodeClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -34,6 +32,8 @@ public class DrawingPane extends Pane implements SelectionTrait {
     private long startNode;
 
     private Set<NodeShape> nodeShapes = new HashSet<>();
+
+    private Set<RelationshipShape> relationshipShapes = new HashSet<>();
 
     /**
      * Handler to call when a node has been clicked.
@@ -79,6 +79,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
         NodeShape startNode = getNodeShape(startId);
         NodeShape endNode = getNodeShape(endId);
         var relationshipShape = new RelationshipShape(idGenerator.nextId(), startNode, endNode);
+        relationshipShapes.add(relationshipShape);
         getChildren().addAll(relationshipShape.getDrawables());
         relationshipShape.setOnRelationshipClicked(this::handleRelationshipClicked);
         return relationshipShape.id;
@@ -164,6 +165,10 @@ public class DrawingPane extends Pane implements SelectionTrait {
     public void handleNodeDrag(NodeShape nodeShape, MouseEvent event) {
         nodeShape.setCenterX(event.getX());
         nodeShape.setCenterY(event.getY());
+
+        relationshipShapes.stream()
+                .filter(relationshipShape -> relationshipShape.hasNode(nodeShape.id))
+                .forEach(RelationshipShape::update);
     }
 
     public void handleRelationshipClicked(RelationshipClickedEvent event) {

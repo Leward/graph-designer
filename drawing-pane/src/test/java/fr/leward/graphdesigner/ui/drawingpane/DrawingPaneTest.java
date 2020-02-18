@@ -135,6 +135,22 @@ public class DrawingPaneTest {
     }
 
     @Test
+    public void testMoveNodeWithRelationship(FxRobot robot) {
+        Point2D newPointC = new Point2D(250, 150);
+
+        var dragStart = getPointAt(robot, pointC.getX(), pointC.getY());
+        var dragEnd = getPointAt(robot, newPointC.getX(), newPointC.getY());
+        robot.drag(dragStart, MouseButton.PRIMARY).dropTo(dragEnd);
+
+        var clickedRelationship = new AtomicLong(-1);
+        drawingPane.setOnRelationshipClickedHandler(event -> clickedRelationship.set(event.id));
+        var midPoint = pointA.midpoint(newPointC);
+        clickAt(robot, midPoint.getX(), midPoint.getY());
+        assertEquals(relA, clickedRelationship.get());
+
+    }
+
+    @Test
     public void testSelectASingleNode(FxRobot robot) {
         this.clickAt(robot, pointA.getX(), pointA.getY());
         assertTrue(drawingPane.isSelected(nodeA));

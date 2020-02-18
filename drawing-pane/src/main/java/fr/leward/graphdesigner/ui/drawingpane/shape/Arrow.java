@@ -30,6 +30,10 @@ public class Arrow extends Group {
      */
     private double headLength = 10;
 
+    public Arrow() {
+        this(Point2D.ZERO, Point2D.ZERO);
+    }
+
     public Arrow(Point2D from, Point2D to) {
         this.from = from;
         this.to = to;
@@ -100,4 +104,9 @@ public class Arrow extends Group {
         lineHead3.setY(lineHead1.getY());
     }
 
+    public void update(Point2D from, Point2D to) {
+        this.from = from;
+        this.to = to;
+        buildShapes();
+    }
 }
