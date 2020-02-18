@@ -41,5 +41,8 @@ public class DrawingPaneDemo extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+
+        // Needed, otherwise keyboard events are not captured
+        drawingPane.requestFocus();
     }
 }
