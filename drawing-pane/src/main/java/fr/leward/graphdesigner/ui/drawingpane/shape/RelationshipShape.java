@@ -48,6 +48,11 @@ public class RelationshipShape {
         // Attach Mouse Click events
         label.setOnMouseClicked(this::handleMouseClick);
         arrow.setOnMouseClicked(this::handleMouseClick);
+
+        start.centerXProperty().addListener(observable -> update());
+        start.centerYProperty().addListener(observable -> update());
+        end.centerXProperty().addListener(observable -> update());
+        end.centerYProperty().addListener(observable -> update());
     }
 
     public void update() {

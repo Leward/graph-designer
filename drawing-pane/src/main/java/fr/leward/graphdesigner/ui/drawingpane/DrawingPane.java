@@ -165,10 +165,6 @@ public class DrawingPane extends Pane implements SelectionTrait {
     public void handleNodeDrag(NodeShape nodeShape, MouseEvent event) {
         nodeShape.setCenterX(event.getX());
         nodeShape.setCenterY(event.getY());
-
-        relationshipShapes.stream()
-                .filter(relationshipShape -> relationshipShape.hasNode(nodeShape.id))
-                .forEach(RelationshipShape::update);
     }
 
     public void handleRelationshipClicked(RelationshipClickedEvent event) {
