@@ -13,11 +13,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class DrawingPane extends Pane implements SelectionTrait {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DrawingPane.class);
 
     private IdGenerator idGenerator;
 
@@ -124,6 +128,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
     }
 
     public void handleNodeClicked(NodeClickedEvent event) {
+        LOGGER.debug("Node {} clicked (ctrlKeyPressed={})", event.id, ctrlKeyPressed);
         if (onNodeClickedHandler != null) {
             onNodeClickedHandler.handle(event);
         }
@@ -168,12 +173,14 @@ public class DrawingPane extends Pane implements SelectionTrait {
     }
 
     public void handleKeyPressed(KeyEvent event) {
+        LOGGER.debug("Key {} pressed", event.getCode());
         if (event.getCode() == KeyCode.CONTROL) {
             ctrlKeyPressed = true;
         }
     }
 
     public void handleKeyReleased(KeyEvent event) {
+        LOGGER.debug("Key {} released", event.getCode());
         if (event.getCode() == KeyCode.CONTROL) {
             ctrlKeyPressed = false;
         }
