@@ -47,4 +47,12 @@ public class NodeShape extends Circle {
     public void setOnNodeClicked(EventHandler<NodeClickedEvent> onNodeClicked) {
         this.onNodeClicked = onNodeClicked;
     }
+
+    public void markSelected() {
+        getStyleClass().add("selected");
+    }
+
+    public void markUnselected() {
+        getStyleClass().remove("selected");
+    }
 }

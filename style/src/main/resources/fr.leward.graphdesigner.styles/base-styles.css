@@ -1,0 +1,4 @@
+.selected {
+    -fx-stroke-width: 2px;
+    -fx-stroke: yellow;
+}

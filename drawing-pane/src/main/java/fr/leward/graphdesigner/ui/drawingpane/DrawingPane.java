@@ -115,6 +115,7 @@ public class DrawingPane extends Pane {
             } else {
                 selection.selectNode(event.id);
             }
+            updateNodeStyles();
         }
 
         if(mode == DrawingPaneMode.ADD_RELATIONSHIP) {
@@ -125,6 +126,15 @@ public class DrawingPane extends Pane {
                 addRelationship(startNode, endNode);
             }
         }
+    }
+
+    public void updateNodeStyles() {
+        nodeShapes.stream()
+                .filter(nodeShape -> selection.hasNode(nodeShape.id))
+                .forEach(NodeShape::markSelected);
+        nodeShapes.stream()
+                .filter(nodeShape -> !selection.hasNode(nodeShape.id))
+                .forEach(NodeShape::markUnselected);
     }
 
     public void handleNodeDrag(NodeShape nodeShape, MouseEvent event) {

@@ -11,6 +11,7 @@
         <module>drawing-pane</module>
         <module>graph-editor-core</module>
         <module>app</module>
+        <module>style</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,6 +1,7 @@
 package fr.leward.graphdesigner.ui.drawingpane;
 
 import fr.leward.graphdesigner.core.IdGenerator;
+import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -138,6 +139,12 @@ public class DrawingPaneTest {
     public void testSelectASingleNode(FxRobot robot) {
         this.clickAt(robot, pointA.getX(), pointA.getY());
         assertTrue(drawingPane.isNodeSelected(nodeA));
+
+        // Node A has the .selected class
+        var node = robot
+                .lookup(n -> n instanceof NodeShape && ((NodeShape) n).id == nodeA)
+                .query();
+        assertTrue(node.getStyleClass().contains("selected"));
     }
 
     @Test
