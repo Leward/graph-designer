@@ -9,7 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -138,7 +137,7 @@ public class DrawingPaneTest {
     @Test
     public void testSelectASingleNode(FxRobot robot) {
         this.clickAt(robot, pointA.getX(), pointA.getY());
-        assertTrue(drawingPane.isNodeSelected(nodeA));
+        assertTrue(drawingPane.isSelected(nodeA));
 
         // Node A has the .selected class
         var node = robot
@@ -153,8 +152,8 @@ public class DrawingPaneTest {
         robot.press(KeyCode.CONTROL);
         this.clickAt(robot, pointB.getX(), pointB.getY());
         robot.release(KeyCode.CONTROL);
-        assertTrue(drawingPane.isNodeSelected(nodeA));
-        assertTrue(drawingPane.isNodeSelected(nodeB));
+        assertTrue(drawingPane.isSelected(nodeA));
+        assertTrue(drawingPane.isSelected(nodeB));
     }
 
     /**

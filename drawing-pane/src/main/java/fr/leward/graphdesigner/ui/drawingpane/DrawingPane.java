@@ -5,6 +5,9 @@ import fr.leward.graphdesigner.ui.drawingpane.event.NodeClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -14,15 +17,11 @@ import javafx.scene.layout.Pane;
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: Decouple so that it can be tested
-
-public class DrawingPane extends Pane {
+public class DrawingPane extends Pane implements SelectionTrait {
 
     private IdGenerator idGenerator;
 
     private DrawingPaneMode mode = DrawingPaneMode.DEFAULT;
-
-    private Selection selection = new Selection();
 
     /**
      * Used when drawing a relationship ({@link #mode} == {@link DrawingPaneMode#ADD_RELATIONSHIP}) to keep track
@@ -50,6 +49,7 @@ public class DrawingPane extends Pane {
         setOnMouseClicked(this::handlePaneClick);
         setOnKeyPressed(this::handleKeyPressed);
         setOnKeyReleased(this::handleKeyReleased);
+        selection.addListener(this::handleSelectionChanged);
         requestFocus();
     }
 
@@ -98,6 +98,25 @@ public class DrawingPane extends Pane {
         this.switchMode(DrawingPaneMode.DEFAULT);
     }
 
+
+    public void handleSelectionChanged(SetChangeListener.Change<? extends Long> change) {
+        var added = change.getElementAdded();
+        if (added != null) {
+            nodeShapes.stream()
+                    .filter(nodeShape -> nodeShape.id == added)
+                    .findFirst()
+                    .ifPresent(NodeShape::markSelected);
+        }
+
+        var removed = change.getElementRemoved();
+        if (removed != null) {
+            nodeShapes.stream()
+                    .filter(nodeShape -> nodeShape.id == removed)
+                    .findFirst()
+                    .ifPresent(NodeShape::markUnselected);
+        }
+    }
+
     public void handlePaneClick(MouseEvent event) {
         if (mode == DrawingPaneMode.ADD_NODE) {
             addNode(event.getX(), event.getY());
@@ -109,17 +128,17 @@ public class DrawingPane extends Pane {
             onNodeClickedHandler.handle(event);
         }
 
-        if(mode == DrawingPaneMode.DEFAULT) {
-            if(ctrlKeyPressed) {
-                selection.addNodeToSelection(event.id);
+        if (mode == DrawingPaneMode.DEFAULT) {
+            if (ctrlKeyPressed) {
+                addToSelection(event.id);
             } else {
-                selection.selectNode(event.id);
+                select(event.id);
             }
             updateNodeStyles();
         }
 
-        if(mode == DrawingPaneMode.ADD_RELATIONSHIP) {
-            if(startNode == 0) {
+        if (mode == DrawingPaneMode.ADD_RELATIONSHIP) {
+            if (startNode == 0) {
                 startNode = event.id;
             } else {
                 long endNode = event.id;
@@ -130,10 +149,10 @@ public class DrawingPane extends Pane {
 
     public void updateNodeStyles() {
         nodeShapes.stream()
-                .filter(nodeShape -> selection.hasNode(nodeShape.id))
+                .filter(nodeShape -> selection.contains(nodeShape.id))
                 .forEach(NodeShape::markSelected);
         nodeShapes.stream()
-                .filter(nodeShape -> !selection.hasNode(nodeShape.id))
+                .filter(nodeShape -> !selection.contains(nodeShape.id))
                 .forEach(NodeShape::markUnselected);
     }
 
@@ -149,13 +168,13 @@ public class DrawingPane extends Pane {
     }
 
     public void handleKeyPressed(KeyEvent event) {
-        if(event.getCode() == KeyCode.CONTROL) {
+        if (event.getCode() == KeyCode.CONTROL) {
             ctrlKeyPressed = true;
         }
     }
 
     public void handleKeyReleased(KeyEvent event) {
-        if(event.getCode() == KeyCode.CONTROL) {
+        if (event.getCode() == KeyCode.CONTROL) {
             ctrlKeyPressed = false;
         }
     }
@@ -168,13 +187,5 @@ public class DrawingPane extends Pane {
 
     public void setOnRelationshipClickedHandler(EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler) {
         this.onRelationshipClickedHandler = onRelationshipClickedHandler;
-    }
-
-    public boolean isNodeSelected(long node) {
-        return selection.hasNode(node);
-    }
-
-    public boolean isRelationshipSelected(long relationship) {
-        return selection.hasRelationship(relationship);
     }
 }
