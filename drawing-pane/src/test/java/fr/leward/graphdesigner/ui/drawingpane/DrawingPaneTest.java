@@ -172,6 +172,29 @@ public class DrawingPaneTest {
         assertTrue(drawingPane.isSelected(nodeB));
     }
 
+    @Test
+    public void testMoveTwoNodesTogether(FxRobot robot) {
+        robot.press(KeyCode.CONTROL); // Use control to select and move several nodes
+        this.clickAt(robot, pointB.getX(), pointB.getY());
+
+        double moveX = 50;
+        double moveY = 70;
+        var dragStart = getPointAt(robot, pointA.getX(), pointA.getY());
+        var dragEnd = getPointAt(robot, pointA.getX() + moveX, pointA.getY() + moveY);
+        robot.drag(dragStart, MouseButton.PRIMARY).dropTo(dragEnd); // Control has to be pressed during drag
+
+        var clickedNode = new AtomicLong(-1);
+        drawingPane.setOnNodeClickedHandler(event -> {
+            clickedNode.set(event.id);
+        });
+        this.clickAt(robot, pointA.getX() + moveX, pointA.getY() + moveY); // New Position of A
+        assertEquals(nodeA, clickedNode.get());
+        clickedNode.set(-1); // reset
+        this.clickAt(robot, pointB.getX() + moveX, pointB.getY() + moveY); // New Position of B, should have been dragged alongside A
+        robot.release(KeyCode.CONTROL);
+        assertEquals(nodeB, clickedNode.get());
+    }
+
     /**
      * Triggers a click at the (x,y) coordinates where (0,0) is the top-left corner of the drawing pane.
      */
