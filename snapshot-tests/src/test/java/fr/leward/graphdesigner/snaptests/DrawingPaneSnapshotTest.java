@@ -1,6 +1,7 @@
-package fr.leward.graphdesigner.ui.drawingpane;
+package fr.leward.graphdesigner.snaptests;
 
 import fr.leward.graphdesigner.core.IdGenerator;
+import fr.leward.graphdesigner.ui.drawingpane.DrawingPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;

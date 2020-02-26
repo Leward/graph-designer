@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>drawing-pane</artifactId>
+    <artifactId>snapshot-tests</artifactId>
 
     <build>
         <plugins>
@@ -23,8 +23,16 @@
                         --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
                         --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
                         --add-opens graph.designer.drawing.pane/fr.leward.graphdesigner.ui.drawingpane=ALL-UNNAMED
+                        --add-opens graph.designer.snaptests/fr.leward.graphdesigner.snaptests=ALL-UNNAMED
                         --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
                     </argLine>
+                    <systemPropertyVariables>
+                        <testfx.robot>glass</testfx.robot>
+                        <testfx.headless>true</testfx.headless>
+                        <prism.order>sw</prism.order>
+                        <prism.text>t2k</prism.text>
+                        <java.awt.headlress>true</java.awt.headlress>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -33,19 +41,8 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>graph-editor-core</artifactId>
+            <artifactId>drawing-pane</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>style</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
         </dependency>
 
         <dependency>
@@ -75,7 +72,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.11.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -85,6 +81,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
 </project>

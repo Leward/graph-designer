@@ -1,16 +1,14 @@
-package fr.leward.graphdesigner.ui.drawingpane;
+package fr.leward.graphdesigner.snaptests;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import org.assertj.core.api.Assertions;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static org.assertj.core.api.Assertions.fail;
 
 public class Snapshot {
 
@@ -38,7 +36,7 @@ public class Snapshot {
         Image previousSnapshot = getSavedSnapshot();
 
         if (snapshot.getWidth() != previousSnapshot.getWidth() || snapshot.getHeight() != previousSnapshot.getHeight()) {
-            fail("The two snapshots are not of the same size");
+            Assertions.fail("The two snapshots are not of the same size");
         }
 
         for (int x = 0; x < (int) snapshot.getWidth(); x++) {
@@ -46,7 +44,7 @@ public class Snapshot {
                 var a = snapshot.getPixelReader().getArgb(x, y);
                 var b = previousSnapshot.getPixelReader().getArgb(x, y);
                 if(a != b) {
-                    fail("Current snapshot differs from save snapshot");
+                    Assertions.fail("Current snapshot differs from save snapshot");
                 }
             }
         }
