@@ -14,10 +14,9 @@ import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class DrawingPane extends Pane implements SelectionTrait {
 
@@ -88,10 +87,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
     }
 
     private NodeShape getNodeShape(long id) throws IllegalArgumentException {
-        return nodeShapes.values()
-                .stream()
-                .filter(nodeShape -> nodeShape.id == id)
-                .findFirst()
+        return findNode(nodeShape -> nodeShape.id == id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Node of ID %d not found in Drawing Pane", id)));
     }
 
@@ -106,24 +102,15 @@ public class DrawingPane extends Pane implements SelectionTrait {
         this.switchMode(DrawingPaneMode.DEFAULT);
     }
 
-
     public void handleSelectionChanged(SetChangeListener.Change<? extends Long> change) {
         var added = change.getElementAdded();
         if (added != null) {
-            nodeShapes.values()
-                    .stream()
-                    .filter(nodeShape -> nodeShape.id == added)
-                    .findFirst()
-                    .ifPresent(NodeShape::markSelected);
+            findNode(nodeShape -> nodeShape.id == added).ifPresent(NodeShape::markSelected);
         }
 
         var removed = change.getElementRemoved();
         if (removed != null) {
-            nodeShapes.values()
-                    .stream()
-                    .filter(nodeShape -> nodeShape.id == removed)
-                    .findFirst()
-                    .ifPresent(NodeShape::markUnselected);
+            findNode(nodeShape -> nodeShape.id == removed).ifPresent(NodeShape::markSelected);
         }
     }
 
@@ -159,14 +146,8 @@ public class DrawingPane extends Pane implements SelectionTrait {
     }
 
     public void updateNodeStyles() {
-        nodeShapes.values()
-                .stream()
-                .filter(nodeShape -> selection.contains(nodeShape.id))
-                .forEach(NodeShape::markSelected);
-        nodeShapes.values()
-                .stream()
-                .filter(nodeShape -> !selection.contains(nodeShape.id))
-                .forEach(NodeShape::markUnselected);
+        findNodes(nodeShape -> selection.contains(nodeShape.id)).forEach(NodeShape::markSelected);
+        findNodes(nodeShape -> !selection.contains(nodeShape.id)).forEach(NodeShape::markUnselected);
     }
 
     public void handleNodeDrag(NodeShape nodeShape, MouseEvent event) {
@@ -176,7 +157,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
         nodeShape.setCenterX(event.getX());
         nodeShape.setCenterY(event.getY());
 
-        if(event.isControlDown()) {
+        if (event.isControlDown()) {
             selection.stream()
                     .filter(nodeShapes::containsKey)
                     .filter(selectedId -> !selectedId.equals(nodeShape.id))
@@ -216,5 +197,15 @@ public class DrawingPane extends Pane implements SelectionTrait {
 
     public void setOnRelationshipClickedHandler(EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler) {
         this.onRelationshipClickedHandler = onRelationshipClickedHandler;
+    }
+
+    private Optional<NodeShape> findNode(Predicate<NodeShape> predicate) {
+        return findNodes(predicate).findFirst();
+    }
+
+    private Stream<NodeShape> findNodes(Predicate<NodeShape> predicate) {
+        return nodeShapes.values()
+                .stream()
+                .filter(predicate);
     }
 }
