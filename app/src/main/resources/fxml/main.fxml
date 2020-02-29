@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 
+<?import fr.leward.graphdesigner.ui.drawingpane.DrawingPane?>
 <BorderPane fx:id="root" fx:controller="fr.leward.graphdesigner.MainController" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <!--<left>-->
         <!--<HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER">-->
@@ -38,8 +39,8 @@
         </VBox>
     </top>
     <center>
-        <Pane fx:id="pane" style="-fx-background-color: white;" BorderPane.alignment="TOP_LEFT">
-        </Pane>
+        <DrawingPane fx:id="pane" style="-fx-background-color: white;" BorderPane.alignment="TOP_LEFT">
+        </DrawingPane>
     </center>
     <right>
         <VBox fx:id="rightPane" prefWidth="200.0" style="-fx-background-color: lightsteelblue; -fx-padding: 5px;">

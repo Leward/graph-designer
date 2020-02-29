@@ -10,13 +10,12 @@ import javafx.scene.input.MouseEvent;
  */
 public class NodeDrawnEvent extends Event {
 
-    /**
-     * ID of the new node (generated with an {@link IdGenerator})
-     */
+    static final EventType<MouseEvent> EVENT_TYPE = new EventType<MouseEvent>(Event.ANY, "NODE_DRAWN");
+
     public final long id;
 
-    public NodeDrawnEvent(IdGenerator idGenerator) {
-        super(new EventType<MouseEvent>(Event.ANY, "NODE_DRAWN"));
-        this.id = idGenerator.nextId();
+    public NodeDrawnEvent(long id) {
+        super(EVENT_TYPE);
+        this.id = id;
     }
 }

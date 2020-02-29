@@ -1,5 +1,5 @@
 package fr.leward.graphdesigner.ui.drawingpane;
 
-enum DrawingPaneMode {
+public enum DrawingPaneMode {
     DEFAULT, ADD_NODE, ADD_RELATIONSHIP
 }

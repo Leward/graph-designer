@@ -25,7 +25,7 @@ public class GlobalOnKeyPressedEventHandler implements EventHandler<KeyEvent> {
     public GlobalOnKeyPressedEventHandler() {
         mainController = MainController.getInstance();
         selection = mainController.getSelection();
-        stateManager = mainController.getStateManager();
+//        stateManager = mainController.getStateManager();
     }
 
     @Override

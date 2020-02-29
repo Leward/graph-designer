@@ -2,7 +2,9 @@ package fr.leward.graphdesigner.ui.drawingpane;
 
 import fr.leward.graphdesigner.core.IdGenerator;
 import fr.leward.graphdesigner.ui.drawingpane.event.NodeClickedEvent;
+import fr.leward.graphdesigner.ui.drawingpane.event.NodeDrawnEvent;
 import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
+import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipDrawnEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
 import javafx.collections.SetChangeListener;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -46,10 +49,30 @@ public class DrawingPane extends Pane implements SelectionTrait {
      */
     private EventHandler<RelationshipClickedEvent> onRelationshipClickedHandler;
 
+    /**
+     * Handler to call when a new Node has been drawn by the user.
+     */
+    private EventHandler<NodeDrawnEvent> onNodeDrawnHandler;
+
+    /**
+     * Handler to call when a new Relationship has been drawn by the user.
+     */
+    private EventHandler<RelationshipDrawnEvent> onRelationshipDrawnHandler;
+
     private boolean ctrlKeyPressed;
+
+    public DrawingPane() {
+        var nextId = new AtomicLong(1);
+        idGenerator = nextId::getAndIncrement;
+        init();
+    }
 
     public DrawingPane(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
+        init();
+    }
+
+    private void init() {
         setFocusTraversable(true);
         setOnMouseClicked(this::handlePaneClick);
         setOnKeyPressed(this::handleKeyPressed);
@@ -61,6 +84,8 @@ public class DrawingPane extends Pane implements SelectionTrait {
     /**
      * Programmatically add a node to the pane (not drawn manually by the user).
      * The position of the node will be picked randomly in the visible screen.
+     *
+     * Since the node is added programmatically, this will not raise a {@link NodeDrawnEvent}
      *
      * @return the ID the the new Node
      */
@@ -116,31 +141,49 @@ public class DrawingPane extends Pane implements SelectionTrait {
 
     public void handlePaneClick(MouseEvent event) {
         if (mode == DrawingPaneMode.ADD_NODE) {
-            addNode(event.getX(), event.getY());
+            handlePaneClickInAddNodeMode(event);
+        }
+    }
+
+    private void handlePaneClickInAddNodeMode(MouseEvent event) {
+        long id = addNode(event.getX(), event.getY());
+        if(onNodeDrawnHandler != null) {
+            onNodeDrawnHandler.handle(new NodeDrawnEvent(id));
         }
     }
 
     public void handleNodeClicked(NodeClickedEvent event) {
-        LOGGER.debug("Node {} clicked (ctrlKeyPressed={})", event.id, ctrlKeyPressed);
+        LOGGER.debug("Node {} clicked (ctrlKeyPressed={}, currentMode={})", event.id, ctrlKeyPressed, mode);
         if (onNodeClickedHandler != null) {
             onNodeClickedHandler.handle(event);
         }
 
-        if (mode == DrawingPaneMode.DEFAULT) {
-            if (ctrlKeyPressed) {
-                addToSelection(event.id);
-            } else {
-                select(event.id);
-            }
-            updateNodeStyles();
+        switch (mode) {
+            case DEFAULT:
+                handleNodeClickInDefaultMode(event);
+            case ADD_RELATIONSHIP:
+                handleNodeClickInAddRelationshipMode(event);
         }
+    }
 
-        if (mode == DrawingPaneMode.ADD_RELATIONSHIP) {
-            if (startNode == 0) {
-                startNode = event.id;
-            } else {
-                long endNode = event.id;
-                addRelationship(startNode, endNode);
+    private void handleNodeClickInDefaultMode(NodeClickedEvent event) {
+        if (ctrlKeyPressed) {
+            addToSelection(event.id);
+        } else {
+            select(event.id);
+        }
+        updateNodeStyles();
+    }
+
+    private void handleNodeClickInAddRelationshipMode(NodeClickedEvent event) {
+        if (startNode == 0) {
+            startNode = event.id;
+        } else {
+            long endNode = event.id;
+            var id = addRelationship(startNode, endNode);
+            if(onRelationshipDrawnHandler != null) {
+                var relDrawnEvent = new RelationshipDrawnEvent(id, "DEFAULT", startNode, endNode);
+                onRelationshipDrawnHandler.handle(relDrawnEvent);
             }
         }
     }
@@ -199,6 +242,14 @@ public class DrawingPane extends Pane implements SelectionTrait {
         this.onRelationshipClickedHandler = onRelationshipClickedHandler;
     }
 
+    public void setOnNodeDrawnHandler(EventHandler<NodeDrawnEvent> onNodeDrawnHandler) {
+        this.onNodeDrawnHandler = onNodeDrawnHandler;
+    }
+
+    public void setOnRelationshipDrawnHandler(EventHandler<RelationshipDrawnEvent> onRelationshipDrawnHandler) {
+        this.onRelationshipDrawnHandler = onRelationshipDrawnHandler;
+    }
+
     private Optional<NodeShape> findNode(Predicate<NodeShape> predicate) {
         return findNodes(predicate).findFirst();
     }
@@ -207,5 +258,13 @@ public class DrawingPane extends Pane implements SelectionTrait {
         return nodeShapes.values()
                 .stream()
                 .filter(predicate);
+    }
+
+    public void setIdGenerator(IdGenerator idGenerator) {
+        this.idGenerator = idGenerator;
+    }
+
+    public DrawingPaneMode getMode() {
+        return mode;
     }
 }

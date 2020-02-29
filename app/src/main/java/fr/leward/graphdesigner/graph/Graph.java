@@ -1,5 +1,6 @@
 package fr.leward.graphdesigner.graph;
 
+import fr.leward.graphdesigner.core.IdGenerator;
 import fr.leward.graphdesigner.event.GraphUpdatedEvent;
 import fr.leward.graphdesigner.event.LabelAddedEvent;
 import fr.leward.graphdesigner.event.bus.EventStreams;
@@ -9,9 +10,6 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
-/**
- * Created by Paul-Julien on 01/02/2015.
- */
 public class Graph {
 
     private long lastIdUsed = 0;
