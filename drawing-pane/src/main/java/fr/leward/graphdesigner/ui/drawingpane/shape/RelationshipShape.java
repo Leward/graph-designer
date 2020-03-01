@@ -26,7 +26,7 @@ public class RelationshipShape {
 
     private final Arrow arrow;
 
-    private final String type = "IS_A";
+    private final String type = "IS_A"; // TODO: Allow to customize the relationship type
     private Label label;
     private final Dimension2D labelDimention;
 
