@@ -46,6 +46,16 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+           <plugins>
+               <plugin>
+                   <groupId>org.openjfx</groupId>
+                   <artifactId>javafx-maven-plugin</artifactId>
+                   <version>0.0.4</version>
+               </plugin>
+           </plugins>
+        </pluginManagement>
     </build>
 
     <dependencyManagement>
@@ -106,7 +116,8 @@
             <dependency>
                 <groupId>org.testfx</groupId>
                 <artifactId>openjfx-monocle</artifactId>
-                <version>jdk-12.0.1+2</version> <!-- jdk-11+26 for Java 11, jdk-9+181 for Java 9, 8u76-b04 for Java 8 -->
+                <version>jdk-12.0.1+2
+                </version> <!-- jdk-11+26 for Java 11, jdk-9+181 for Java 9, 8u76-b04 for Java 8 -->
                 <scope>test</scope>
             </dependency>
         </dependencies>
