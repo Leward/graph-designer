@@ -19,9 +19,13 @@ The project is built using Maven. You can chose to package the application or di
 
 To run the project execute the following command:
 
-    mvn javafx:run -pl app
+    mvn install -DskipTests && mvn -pl app javafx:run
 
 To package the application, run:
 
-    mvn javafx:jlink -pl app
+    mvn install -DskipTests && mvn -pl app javafx:run
+    
+Once the application is package with jlink it can be run using:
+
+    app/target/graph-editor/bin/launcher
 
