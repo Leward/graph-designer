@@ -127,6 +127,38 @@ public class AppTest {
         assertEquals(1, controller.countRelationships());
     }
 
+    @Test
+    public void switchingModeReleasesPreviousMenuButtonUsingMenuButton(FxRobot robot) {
+        ToggleButton createNodeButton = robot.lookup("#createNodeButton").query();
+        ToggleButton createRelationshipButton = robot.lookup("#createRelationshipButton").query();
+
+        robot.clickOn(createNodeButton);
+        assertTrue(createNodeButton.isSelected());
+
+        robot.clickOn(createRelationshipButton);
+        assertFalse(createNodeButton.isSelected());
+        assertTrue(createRelationshipButton.isSelected());
+
+        robot.clickOn(createRelationshipButton);
+        assertFalse(createRelationshipButton.isSelected());
+    }
+
+    @Test
+    public void switchingModeReleasesPreviousMenuButtonUsingKeyboard(FxRobot robot) {
+        ToggleButton createNodeButton = robot.lookup("#createNodeButton").query();
+        ToggleButton createRelationshipButton = robot.lookup("#createRelationshipButton").query();
+
+        robot.press(KeyCode.N).release(KeyCode.N);
+        assertTrue(createNodeButton.isSelected());
+
+        robot.press(KeyCode.R).release(KeyCode.R);
+        assertFalse(createNodeButton.isSelected());
+        assertTrue(createRelationshipButton.isSelected());
+
+        robot.press(KeyCode.ESCAPE).release(KeyCode.ESCAPE);
+        assertFalse(createRelationshipButton.isSelected());
+    }
+
     /**
      * Triggers a click at the (x,y) coordinates where (0,0) is the top-left corner of the drawing pane.
      */

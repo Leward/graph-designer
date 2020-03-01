@@ -119,21 +119,44 @@ public class MainController implements Initializable {
             createRelationshipButton.setSelected(false);
         }
         else if(event.getCode().equals(KeyCode.N)) {
-            pane.switchMode(DrawingPaneMode.ADD_NODE);
-            createNodeButton.setSelected(true);
+            switchMode(DrawingPaneMode.ADD_NODE);
         }
         else if(event.getCode() == KeyCode.R) {
-            pane.switchMode(DrawingPaneMode.ADD_RELATIONSHIP);
+            switchMode(DrawingPaneMode.ADD_RELATIONSHIP);
+        }
+    }
+
+    private void switchMode(DrawingPaneMode mode) {
+        pane.switchMode(mode);
+        resetAllToggleButtons(mode);
+    }
+
+    private void leaveMode() {
+        pane.leaveMode();
+        resetAllToggleButtons(pane.getMode());
+    }
+
+    private void resetAllToggleButtons(DrawingPaneMode targetMode) {
+        if(targetMode == DrawingPaneMode.ADD_NODE) {
+            createNodeButton.setSelected(true);
+        }
+        if(targetMode == DrawingPaneMode.ADD_RELATIONSHIP) {
             createRelationshipButton.setSelected(true);
+        }
+        if(targetMode != DrawingPaneMode.ADD_NODE) {
+            createNodeButton.setSelected(false);
+        }
+        if(targetMode != DrawingPaneMode.ADD_RELATIONSHIP) {
+            createRelationshipButton.setSelected(false);
         }
     }
 
     private void handleCreateNodeButtonAction(ActionEvent event) {
         createRelationshipButton.setSelected(false);
         if (pane.getMode() != DrawingPaneMode.ADD_NODE) {
-            pane.switchMode(DrawingPaneMode.ADD_NODE);
+            switchMode(DrawingPaneMode.ADD_NODE);
         } else {
-            pane.leaveMode();
+            leaveMode();
         }
     }
 
@@ -141,10 +164,10 @@ public class MainController implements Initializable {
         createNodeButton.setSelected(false);
         if (pane.getMode() != DrawingPaneMode.ADD_RELATIONSHIP) {
             log.debug("Switching to mode {}", DrawingPaneMode.ADD_RELATIONSHIP);
-            pane.switchMode(DrawingPaneMode.ADD_RELATIONSHIP);
+            switchMode(DrawingPaneMode.ADD_RELATIONSHIP);
         } else {
             log.debug("Leaving mode {}", pane.getMode());
-            pane.leaveMode();
+            leaveMode();
         }
     }
 
