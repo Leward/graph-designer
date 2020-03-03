@@ -161,8 +161,10 @@ public class DrawingPane extends Pane implements SelectionTrait {
         switch (mode) {
             case DEFAULT:
                 handleNodeClickInDefaultMode(event);
+                break;
             case ADD_RELATIONSHIP:
                 handleNodeClickInAddRelationshipMode(event);
+                break;
         }
     }
 
