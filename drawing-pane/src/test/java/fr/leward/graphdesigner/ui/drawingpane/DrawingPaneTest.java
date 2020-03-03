@@ -79,9 +79,7 @@ public class DrawingPaneTest extends BaseDrawingPaneTest {
         robot.drag(dragStart, MouseButton.PRIMARY).dropTo(dragEnd);
 
         var clickedNode = new AtomicLong(-1);
-        drawingPane.setOnNodeClickedHandler(event -> {
-            clickedNode.set(event.id);
-        });
+        drawingPane.setOnNodeClickedHandler(event -> clickedNode.set(event.id));
 
         this.clickAt(robot, 300, 200);
         assertEquals(nodeB, clickedNode.get());

@@ -6,6 +6,7 @@ import fr.leward.graphdesigner.ui.drawingpane.event.NodeDrawnEvent;
 import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipClickedEvent;
 import fr.leward.graphdesigner.ui.drawingpane.event.RelationshipDrawnEvent;
 import fr.leward.graphdesigner.ui.drawingpane.shape.NodeShape;
+import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipBeingDrawn;
 import fr.leward.graphdesigner.ui.drawingpane.shape.RelationshipShape;
 import javafx.collections.SetChangeListener;
 import javafx.event.EventHandler;
@@ -36,6 +37,8 @@ public class DrawingPane extends Pane implements SelectionTrait {
     private long startNode;
 
     private Map<Long, NodeShape> nodeShapes = new HashMap<>();
+
+    Optional<RelationshipBeingDrawn> relationshipBeingDrawn = Optional.empty();
 
     private Set<RelationshipShape> relationshipShapes = new HashSet<>();
 
@@ -75,6 +78,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
     private void init() {
         setFocusTraversable(true);
         setOnMouseClicked(this::handlePaneClick);
+        setOnMouseMoved(this::handleMouseMoved);
         setOnKeyPressed(this::handleKeyPressed);
         setOnKeyReleased(this::handleKeyReleased);
         selection.addListener(this::handleSelectionChanged);
@@ -84,7 +88,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
     /**
      * Programmatically add a node to the pane (not drawn manually by the user).
      * The position of the node will be picked randomly in the visible screen.
-     *
+     * <p>
      * Since the node is added programmatically, this will not raise a {@link NodeDrawnEvent}
      *
      * @return the ID the the new Node
@@ -121,6 +125,7 @@ public class DrawingPane extends Pane implements SelectionTrait {
 
         // Reset some values
         startNode = 0;
+        resetRelationshipBeingDrawn();
     }
 
     public void leaveMode() {
@@ -145,9 +150,15 @@ public class DrawingPane extends Pane implements SelectionTrait {
         }
     }
 
+    public void handleMouseMoved(MouseEvent event) {
+        if (mode == DrawingPaneMode.ADD_RELATIONSHIP && startNode != 0) {
+            relationshipBeingDrawn.ifPresent(it -> it.followMousePointer(event.getX(), event.getY(), nodeShapes.values()));
+        }
+    }
+
     private void handlePaneClickInAddNodeMode(MouseEvent event) {
         long id = addNode(event.getX(), event.getY());
-        if(onNodeDrawnHandler != null) {
+        if (onNodeDrawnHandler != null) {
             onNodeDrawnHandler.handle(new NodeDrawnEvent(id));
         }
     }
@@ -180,10 +191,13 @@ public class DrawingPane extends Pane implements SelectionTrait {
     private void handleNodeClickInAddRelationshipMode(NodeClickedEvent event) {
         if (startNode == 0) {
             startNode = event.id;
+            initRelationshipBeingDrawn(getNodeShape(startNode));
         } else {
             long endNode = event.id;
             var id = addRelationship(startNode, endNode);
-            if(onRelationshipDrawnHandler != null) {
+            startNode = 0;
+            resetRelationshipBeingDrawn();
+            if (onRelationshipDrawnHandler != null) {
                 var relDrawnEvent = new RelationshipDrawnEvent(id, "DEFAULT", startNode, endNode);
                 onRelationshipDrawnHandler.handle(relDrawnEvent);
             }
@@ -232,6 +246,21 @@ public class DrawingPane extends Pane implements SelectionTrait {
         if (event.getCode() == KeyCode.CONTROL) {
             ctrlKeyPressed = false;
         }
+    }
+
+    // Helpers for Relationship Being Drawn
+
+    private void resetRelationshipBeingDrawn() {
+        relationshipBeingDrawn.ifPresent(it -> {
+            getChildren().remove(it);
+            relationshipBeingDrawn = Optional.empty();
+        });
+    }
+
+    private void initRelationshipBeingDrawn(NodeShape startNodeShape) {
+        relationshipBeingDrawn.ifPresent(it -> resetRelationshipBeingDrawn());
+        relationshipBeingDrawn = Optional.of(new RelationshipBeingDrawn(startNodeShape));
+        getChildren().add(relationshipBeingDrawn.get());
     }
 
     // Setters from External Event Handlers
