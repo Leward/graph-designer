@@ -43,7 +43,7 @@ public class RelationshipShape {
         label.setStyle("-fx-background-color: white; -fx-opacity: 1.0; ");
         labelDimention = calculateNodeDimensions(label);
 
-       update();
+        update();
 
         // Attach Mouse Click events
         label.setOnMouseClicked(this::handleMouseClick);
@@ -56,7 +56,6 @@ public class RelationshipShape {
     }
 
     /**
-     *
      * Angle computes the angle between TWO VECTORS both originating at (0, 0)
      * The following allows to get the angle between two points
      * new Point2D(1, 0) is the horizontal vector of size one going to the right (the x axis)
@@ -64,10 +63,19 @@ public class RelationshipShape {
      *
      * @param a start point of the relationship (center point of Node A)
      * @param b end point of the relationship (center point of Node B)
-     * @return the angle between a and b to set the {@link Label} rotation to
+     * @return the angle (in degrees) between a and b to set the {@link Label} rotation to
      */
     public static double calculateLabelAngle(Point2D a, Point2D b) {
-        return new Point2D(1, 0).angle(b.subtract(a));
+        Point2D diff = b.subtract(a);
+
+        double angle;
+        if (diff.getX() < 0 && diff.getY() <= 0) {
+            angle = new Point2D(-1, 0).angle(diff);
+        } else {
+            angle = new Point2D(1, 0).angle(diff);
+        }
+
+        return Math.round(angle * 100) / 100.0;
     }
 
     public void update() {
@@ -102,7 +110,7 @@ public class RelationshipShape {
     }
 
     public void handleMouseClick(MouseEvent event) {
-        if(onRelationshipClicked != null) {
+        if (onRelationshipClicked != null) {
             onRelationshipClicked.handle(new RelationshipClickedEvent(id, event));
         }
     }

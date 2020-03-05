@@ -16,15 +16,18 @@ class RelationshipShapeTest {
         var a = new Point2D(xA, yA);
         var b = new Point2D(xB, yB);
         var angle = RelationshipShape.calculateLabelAngle(a, b);
-        Assertions.assertEquals(expectedAngle, Math.round(angle));
+        Assertions.assertEquals(expectedAngle, angle);
     }
 
     public static Stream<Arguments> testLabelAngleValues() {
         return Stream.of(
                 Arguments.of(100, 100, 200, 100, 0),
                 Arguments.of(100, 100, 200, 200, 45),
-                Arguments.of(100, 100, 100, 200, 90)
-                // TODO: Add more test cases
+                Arguments.of(100, 100, 100, 200, 90),
+                Arguments.of(200, 100, 100, 100, 0),
+                Arguments.of(200, 200, 100, 100, 45),
+                Arguments.of(200, 200, 200, 100, 90),
+                Arguments.of(100, 50, 0, 0, 26.57) // https://www.wolframalpha.com/input/?i=VectorAngle%5B%7B1%2C+0%7D%2C+%7B100%2C+50%7D%5D
         );
     }
 
