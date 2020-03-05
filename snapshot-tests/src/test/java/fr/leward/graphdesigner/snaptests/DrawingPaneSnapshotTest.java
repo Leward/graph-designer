@@ -46,5 +46,25 @@ public class DrawingPaneSnapshotTest extends ApplicationTest {
         snapshot.assertSnapshotRemainsUnchanged();
     }
 
+    @Test
+    void testSnapshotDifferentRelsDirections() throws IOException {
+        interact(() -> {
+            var a = drawingPane.addNode(50, 50);
+            var b = drawingPane.addNode(250, 70);
+            var c = drawingPane.addNode(240, 290);
+            var d = drawingPane.addNode(60, 200);
+
+            drawingPane.addRelationship(a, b);
+            drawingPane.addRelationship(b, c);
+            drawingPane.addRelationship(c, d);
+            drawingPane.addRelationship(d, a);
+
+            snapshot = new Snapshot(scene, "drawing-pane-2");
+        });
+//         snapshot.saveSnapshot(); // Uncomment to save and register an expected change
+        snapshot.saveDebugSnapshot();
+        snapshot.assertSnapshotRemainsUnchanged();
+    }
+
 
 }
