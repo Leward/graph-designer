@@ -55,16 +55,27 @@ public class RelationshipShape {
         end.centerYProperty().addListener(observable -> update());
     }
 
+    /**
+     *
+     * Angle computes the angle between TWO VECTORS both originating at (0, 0)
+     * The following allows to get the angle between two points
+     * new Point2D(1, 0) is the horizontal vector of size one going to the right (the x axis)
+     * see: https://stackoverflow.com/questions/30906542/how-is-the-point2d-angle-method-to-be-understood
+     *
+     * @param a start point of the relationship (center point of Node A)
+     * @param b end point of the relationship (center point of Node B)
+     * @return the angle between a and b to set the {@link Label} rotation to
+     */
+    public static double calculateLabelAngle(Point2D a, Point2D b) {
+        return new Point2D(1, 0).angle(b.subtract(a));
+    }
+
     public void update() {
         var startAnchorPoint = start.getOuterPointTowards(end.getCenter());
         var endAnchorPoint = end.getOuterPointTowards(start.getCenter());
         arrow.update(startAnchorPoint, endAnchorPoint);
 
-        // Angle computes the angle between TWO VECTORS both originating at (0, 0)
-        // The following allows to get the angle between two points
-        //  new Point2D(1, 0) is the horizontal vector of size one going to the right (the x axis)
-        // see: https://stackoverflow.com/questions/30906542/how-is-the-point2d-angle-method-to-be-understood
-        double angle = new Point2D(1, 0).angle(end.getCenter().subtract(start.getCenter()));
+        double angle = calculateLabelAngle(start.getCenter(), end.getCenter());
         var midpoint = start.getCenter().midpoint(end.getCenter());
         label.setLayoutX(midpoint.getX() - (labelDimention.getWidth() / 2));
         label.setLayoutY(midpoint.getY() - (labelDimention.getHeight() / 2));
@@ -102,5 +113,12 @@ public class RelationshipShape {
 
     public boolean hasNode(long id) {
         return start.id == id || end.id == id;
+    }
+
+    /**
+     * Package visible for testing.
+     */
+    double getLabelAngle() {
+        return label.getRotate();
     }
 }
